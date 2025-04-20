@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:url var="bootstrap" value="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" scope="application" />
 <c:set var="contexto" value="${pageContext.request.contextPath}" scope="application" />
@@ -12,6 +12,47 @@
         <link rel="stylesheet" href="${bootstrap}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
+        <style>
+            .mensaje-flotanteError {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #f8d7da;
+                color: #721c24;
+                padding: 10px 20px;
+                border: 1px solid #f5c6cb;
+                border-radius: 5px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1050;
+                font-size: 14px;
+                animation: fadeIn 0.5s ease-out;
+            }
+
+            .mensaje-flotanteCorrecto {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #66ff66;
+                padding: 10px 20px;
+                border: 1px solid #f5c6cb;
+                border-radius: 5px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1050;
+                font-size: 14px;
+                animation: fadeIn 0.5s ease-out;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        </style>
     </head>
     <body>
 
@@ -202,6 +243,74 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal de Registro -->
+        <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="${contexto}/RegistroServlet" method="POST" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalRegistroLabel">Registro de Cliente</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="apellidos" class="form-label">Apellidos</label>
+                                <input type="text" class="form-control" id="apellidos" name="apellidos">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="dni" class="form-label">DNI</label>
+                                <input type="text" class="form-control" id="dni" name="dni" maxlength="9">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Correo electrónico</label>
+                                <input type="email" class="form-control" id="email" name="email">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="password" name="password">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="genero" class="form-label">Género</label>
+                                <select class="form-select" id="genero" name="genero">
+                                    <option value="MUJER">Mujer</option>
+                                    <option value="HOMBRE">Hombre</option>
+                                    <option value="OTRO">Otro</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                                <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento">
+                            </div>
+                            
+                            <div class="col-md-6 form-group">
+                                <label for="avatar">Avatar</label>
+                                <input type="file" id="avatar" name="avatar" accept="image/*">
+                                <p id="avatarError" style="color: red"></p>
+                            </div>
+                            
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Registrarse</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
 
         <%@ include file="/INC/pie.jsp" %>
 

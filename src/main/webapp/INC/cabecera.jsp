@@ -6,9 +6,9 @@
 
         <a class="navbar-brand d-flex align-items-center">
             <img src="${pageContext.request.contextPath}/IMG/logoPetClinic.png"
-            alt="Logo"
-            class="mr-3"
-            style="max-height: 119px; object-fit: contain;">
+                 alt="Logo"
+                 class="mr-3"
+                 style="max-height: 119px; object-fit: contain;">
             <strong class="fs-2">PET CLINIC</strong>
         </a>
 
@@ -18,7 +18,7 @@
                     <form action="${contexto}/FrontController" method="POST">
                         <button type="submit" class="btn btn-outline-danger mr-3" name="boton" value="logout">Cerrar sesión</button>
                     </form>
-                        
+
                     <div class="d-flex flex-column align-items-center">
                         <img src="${contexto}/IMG/avatares/${sessionScope.usuario.avatar}" class="rounded-circle" style="width: 40px; height: 40px;">
                         <span class="ml-2">${sessionScope.usuario.nombre}</span>
@@ -32,8 +32,11 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <button type="button" class="btn btn-outline-primary mr-2" data-toggle="modal" data-target="#modalLogin">
+                    <button type="button" class="btn btn-outline-primary mr-2" data-bs-toggle="modal" data-bs-target="#modalLogin">
                         Iniciar Sesi&oacute;n
+                    </button>
+                    <button type="button" class="btn btn-outline-primary mr-2" data-bs-toggle="modal" data-bs-target="#modalRegistro">
+                        Registrarse como cliente
                     </button>
                 </c:otherwise>
             </c:choose>
