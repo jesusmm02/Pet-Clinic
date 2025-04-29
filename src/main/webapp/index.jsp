@@ -12,6 +12,11 @@
         <link rel="stylesheet" href="${bootstrap}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
+        <script src="${contexto}/JS/comprobarEmail.js" defer></script>
+        <script src="${contexto}/JS/generarDNI.js" defer></script>
+        <script src="${contexto}/JS/comprobarDNI.js" defer></script>
+        <script src="${contexto}/JS/validarAvatar.js" defer></script>
+        <script src="${contexto}/JS/vistaAvatar.js" defer></script>
         <style>
             .mensaje-flotanteError {
                 position: fixed;
@@ -61,6 +66,13 @@
         <c:if test="${not empty error}">
             <div id="mensajeFlotante" class="mensaje-flotanteError mt-5">
                 <c:out value="${error}" />
+            </div>
+        </c:if>
+        
+        <!-- Mostrar el mensaje de error si existe -->
+        <c:if test="${not empty errorCreate}">
+            <div id="mensajeFlotante" class="mensaje-flotanteError mt-5">
+                <c:out value="${errorCreate}" />
             </div>
         </c:if>
 
@@ -230,11 +242,11 @@
                         <form action="${contexto}/FrontController" method="POST">
                             <div class="mb-3">
                                 <label for="email">Correo</label>
-                                <input type="text" class="form-control" id="email" name="email">
+                                <input type="text" class="form-control" id="emailLogin" name="email">
                             </div>
                             <div class="mb-3">
                                 <label for="password">Contraseña</label>
-                                <input type="password" class="form-control" id="password" name="password">
+                                <input type="password" class="form-control" id="passwordLogin" name="password">
                             </div>
                             <input type="hidden" name="boton" value="login">
                             <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
@@ -244,72 +256,74 @@
             </div>
         </div>
 
+                            
         <!-- Modal de Registro -->
         <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="${contexto}/RegistroServlet" method="POST" enctype="multipart/form-data">
+                    <form action="${contexto}/RegistroController" method="POST" enctype="multipart/form-data">
                         <div class="modal-header">
                             <h5 class="modal-title" id="modalRegistroLabel">Registro de Cliente</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
 
                         <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombreRegistro" name="nombre">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="apellidos" class="form-label">Apellidos</label>
+                                    <input type="text" class="form-control" id="apellidos" name="apellidos">
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="apellidos" class="form-label">Apellidos</label>
-                                <input type="text" class="form-control" id="apellidos" name="apellidos">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="dni" class="form-label">DNI</label>
+                                    <input type="text" class="form-control" id="dni" name="dni">
+                                    <p id="mensaje"></p>
+                                    <small id="mensajeDNI" class="text-danger"></small>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Correo electrónico</label>
+                                    <input type="email" class="form-control" id="email" name="email">
+                                    <small id="emailError" class="text-danger"></small>
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="dni" class="form-label">DNI</label>
-                                <input type="text" class="form-control" id="dni" name="dni" maxlength="9">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="passwordRegistro" name="password">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="confirmPassword">Confirmar Contraseña</label>
+                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Correo electrónico</label>
-                                <input type="email" class="form-control" id="email" name="email">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label for="avatar">Avatar</label>
+                                    <input type="file" id="avatar" name="avatar" accept="image/*">
+                                    <img class="mt-2" id="vistaPreviaAvatar" alt="Vista previa del avatar">
+                                    <p id="avatarError" style="color: red"></p>
+                                </div>
                             </div>
-
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="password" name="password">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="genero" class="form-label">Género</label>
-                                <select class="form-select" id="genero" name="genero">
-                                    <option value="MUJER">Mujer</option>
-                                    <option value="HOMBRE">Hombre</option>
-                                    <option value="OTRO">Otro</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
-                                <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento">
-                            </div>
-                            
-                            <div class="col-md-6 form-group">
-                                <label for="avatar">Avatar</label>
-                                <input type="file" id="avatar" name="avatar" accept="image/*">
-                                <p id="avatarError" style="color: red"></p>
-                            </div>
-                            
                         </div>
 
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">Registrarse</button>
+                            <button type="submit" id="btnRegistrar" class="btn btn-success">Registrarse</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
 
 
         <%@ include file="/INC/pie.jsp" %>

@@ -1,7 +1,10 @@
 package es.petclinic.controllers;
 
+import es.petclinic.DAO.ClienteDAO;
+import es.petclinic.DAO.IClienteDAO;
 import es.petclinic.DAO.IUsuarioDAO;
 import es.petclinic.DAO.UsuarioDAO;
+import es.petclinic.beans.Cliente;
 import es.petclinic.beans.Usuario;
 import es.petclinic.models.Utils;
 
@@ -65,6 +68,7 @@ public class FrontController extends HttpServlet {
                         String password = request.getParameter("password");
 
                         IUsuarioDAO usuarioDAO = new UsuarioDAO();
+                        IClienteDAO clienteDAO = new ClienteDAO();
                         Usuario usuario = usuarioDAO.obtenerPorEmail(email);
 
                         if (usuario != null && Utils.verifyPassword(password, usuario.getPassword())) {
@@ -81,21 +85,30 @@ public class FrontController extends HttpServlet {
                                         url = "JSP/Veterinario/veterinario.jsp";
                                         break;
                                     case CLIENTE:
-                                        // Verificar si es su primer acceso
-                                        if (usuario.getUltimoAcceso() == null) {
-                                            session.setAttribute("clienteNuevo", usuario);
-                                            url = "JSP/Cliente/primerAccesoCliente.jsp"; // Redirige a cambiar la contraseña
+                                        
+                                        request.setAttribute("acceso", "Has iniciado sesión como cliente.");
+                                        url = "JSP/Cliente/cliente.jsp";
+                                        break;
+                                        
+                                        /**
+                                        // Verificar si tiene datos en la tabla Clientes
+                                        Cliente cliente = clienteDAO.getById(usuario.getId(), Cliente.class);
+                                        
+                                        if (cliente == null) {
+                                            // Usuario registrado, pero no ha completado los datos del cliente
+                                            session.setAttribute("usuario", usuario);
+                                            url = "JSP/Cliente/completarPerfil.jsp";
                                         } else {
-                                            
-                                            // Actualizar fecha de último acceso
+                                            // Cliente ya completo
                                             usuario.setUltimoAcceso(new Date());
-                                            
                                             usuarioDAO.insertOrUpdate(usuario);
                                             
-                                            request.setAttribute("acceso", "Has iniciado sesión como cliente.");
+                                            session.setAttribute("usuario", cliente);
+                                            request.setAttribute("acceso", "Has iniciado sesión como cliente");
                                             url = "JSP/Cliente/cliente.jsp";
                                         }
                                         break;
+                                        **/
                                     default:
                                         request.setAttribute("error", "No tienes permisos para acceder.");
                                         url = ".";

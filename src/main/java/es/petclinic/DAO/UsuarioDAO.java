@@ -9,7 +9,7 @@ import org.hibernate.query.Query;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 public class UsuarioDAO extends GenericoDAO<Usuario> implements IUsuarioDAO {
-    
+
     protected Session session;
     protected Transaction transaction;
 
@@ -34,7 +34,7 @@ public class UsuarioDAO extends GenericoDAO<Usuario> implements IUsuarioDAO {
         }
         throw he;
     }
-    
+
     @Override
     public Usuario obtenerPorEmail(String email) {
         Usuario usuario = null;
@@ -49,5 +49,5 @@ public class UsuarioDAO extends GenericoDAO<Usuario> implements IUsuarioDAO {
         }
         return usuario;
     }
-    
+
 }

@@ -1,5 +1,6 @@
 package es.petclinic.DAO;
 
+import es.petclinic.beans.Cliente;
 import es.petclinic.beans.Usuario;
 
 public interface IUsuarioDAO extends IGenericoDAO<Usuario> {

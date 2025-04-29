@@ -94,12 +94,12 @@ public class Utils {
      * @param request Objeto HttpServletRequest que contiene los parámetros enviados por el usuario.
      * @return "n" si todos los campos obligatorios están completos, "v" si alguno está vacío.
      */
-    public static String comprobarCamposTutor(Enumeration<String> parametros, HttpServletRequest request) {
+    public static String comprobarCampos(Enumeration<String> parametros, HttpServletRequest request) {
         String error = "n";
 
         // Lista de campos obligatorios
         String[] camposCriticos = {
-            "nombre", "apellidos", "password", "email", "dni"
+            "nombre", "apellidos", "dni", "email", "password", "confirmPassword"
         };
 
         for (String campo : camposCriticos) {
@@ -109,90 +109,18 @@ public class Utils {
                 break;
             }
         }
+        
+        // Verificar contraseñas si no hay otros errores
+        if (error.equals("n")) {
+            String password = request.getParameter("password");
+            String confirmPassword = request.getParameter("confirmPassword");
 
-        return error;
-    }
-    
-    
-    /**
-     *
-     * Valida que los campos obligatorios del formulario de edición de un tutor (sin tener en cuenta contraseña) estén completos.
-     *
-     * @param parametros Enumeración de los nombres de parámetros del formulario.
-     * @param request Objeto HttpServletRequest que contiene los parámetros enviados por el usuario.
-     * @return "n" si todos los campos obligatorios están completos, "v" si alguno está vacío.
-     */
-    public static String comprobarCamposTutorSinPasswrd(Enumeration<String> parametros, HttpServletRequest request) {
-        String error = "n";
-
-        // Lista de campos obligatorios
-        String[] camposCriticos = {
-            "nombre", "apellidos", "email", "dni"
-        };
-
-        for (String campo : camposCriticos) {
-            String valor = request.getParameter(campo);
-            if (valor == null || valor.trim().isEmpty()) {
-                error = "v"; // Campo vacío
-                break;
+            if (!password.equals(confirmPassword)) {
+                error = "c"; // Contraseñas no coinciden
             }
         }
 
         return error;
     }
     
-    /**
-     * 
-     * Valida que los campos obligatorios del formulario de registro o edición de un alumno estén completos.
-     * 
-     * @param parametros Enumeración de los nombres de parámetros del formulario.
-     * @param request Objeto HttpServletRequest que contiene los parámetros enviados por el usuario.
-     * @return "n" si todos los campos obligatorios están completos, "v" si alguno está vacío.
-     */
-    public static String comprobarCamposAlumno(Enumeration<String> parametros, HttpServletRequest request) {
-        String error = "n";
-
-        // Lista de campos obligatorios
-        String[] camposCriticos = {
-            "nombre", "apellidos", "password", "email", "dni", "genero"
-        };
-
-        for (String campo : camposCriticos) {
-            String valor = request.getParameter(campo);
-            if (valor == null || valor.trim().isEmpty()) {
-                error = "v"; // Campo vacío
-                break;
-            }
-        }
-
-        return error;
-    }
-    
-    /**
-     * 
-     * Valida que los campos obligatorios del formulario de edición de un alumno (sin tener en cuenta contraseña) estén completos.
-     * 
-     * @param parametros Enumeración de los nombres de parámetros del formulario.
-     * @param request Objeto HttpServletRequest que contiene los parámetros enviados por el usuario.
-     * @return "n" si todos los campos obligatorios están completos, "v" si alguno está vacío.
-     */
-    public static String comprobarCamposAlumnoSinPasswrd(Enumeration<String> parametros, HttpServletRequest request) {
-        String error = "n";
-
-        // Lista de campos obligatorios
-        String[] camposCriticos = {
-            "nombre", "apellidos", "email", "dni", "genero"
-        };
-
-        for (String campo : camposCriticos) {
-            String valor = request.getParameter(campo);
-            if (valor == null || valor.trim().isEmpty()) {
-                error = "v"; // Campo vacío
-                break;
-            }
-        }
-
-        return error;
-    }
-
 }
