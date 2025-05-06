@@ -4,21 +4,17 @@ import es.petclinic.DAO.ClienteDAO;
 import es.petclinic.DAO.IClienteDAO;
 import es.petclinic.DAO.IUsuarioDAO;
 import es.petclinic.DAO.UsuarioDAO;
-import es.petclinic.beans.Cliente;
 
+import es.petclinic.beans.Cliente;
 import es.petclinic.beans.Usuario;
 
 import java.io.IOException;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -55,7 +51,6 @@ public class AJAXController extends HttpServlet {
 
         String accion = request.getParameter("accion");
         
-        HttpSession session = request.getSession();
         IUsuarioDAO usuarioDAO = new UsuarioDAO();
 
         if (accion != null) {
@@ -64,40 +59,16 @@ public class AJAXController extends HttpServlet {
                 case "comprobarEmail":
                     String email = request.getParameter("email");
 
-                    // Obtener el usuario en sesión
-                    Usuario usuarioEnSesion = (Usuario) session.getAttribute("usuario");
-
-                    // Verificar si el email ya existe
+                    // Verifica si el email ya existe en la base de datos
+                    usuarioDAO = new UsuarioDAO();
                     Usuario usuarioExistente = usuarioDAO.obtenerPorEmail(email);
 
-                    // Verificar si el email es del usuario en sesión
-                    boolean esSuPropioEmail = usuarioExistente != null
-                            && usuarioEnSesion != null
-                            && usuarioExistente.getId().equals(usuarioEnSesion.getId());
-
-                    response.setContentType("text/plain");
-                    response.getWriter().write((usuarioExistente != null && !esSuPropioEmail) ? "existe" : "no_existe");
-                    break;
-
-                case "generarDni":
-                    String numeros = request.getParameter("numeros");
-                    String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
-
-                    try {
-                        int posicion = Integer.parseInt(numeros) % 23;
-                        String letra = String.valueOf(letras.charAt(posicion));
-
-                        // Responder con la letra calculada
-                        response.setContentType("application/json");
-                        response.setCharacterEncoding("UTF-8");
-                        response.getWriter().write("{\"data\": \"" + letra + "\"}");
-                    } catch (NumberFormatException e) {
-                        Logger.getLogger(RegistroController.class.getName()).log(Level.SEVERE, null, e);
-
-                        // Enviar error en la respuesta
-                        response.setContentType("application/json");
-                        response.setCharacterEncoding("UTF-8");
-                        response.getWriter().write("{\"error\": \"Formato de DNI inválido\"}");
+                    if (usuarioExistente != null) {
+                        response.setContentType("text/plain");
+                        response.getWriter().write("existe");  // El email ya está registrado
+                    } else {
+                        response.setContentType("text/plain");
+                        response.getWriter().write("no_existe");  // El email no está registrado
                     }
                     break;
                     

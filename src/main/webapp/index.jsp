@@ -13,14 +13,13 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
         <script src="${contexto}/JS/comprobarEmail.js" defer></script>
-        <script src="${contexto}/JS/generarDNI.js" defer></script>
         <script src="${contexto}/JS/comprobarDNI.js" defer></script>
         <script src="${contexto}/JS/validarAvatar.js" defer></script>
         <script src="${contexto}/JS/vistaAvatar.js" defer></script>
         <style>
             .mensaje-flotanteError {
                 position: fixed;
-                top: 20px;
+                top: 80px;
                 right: 20px;
                 background-color: #f8d7da;
                 color: #721c24;
@@ -35,13 +34,13 @@
 
             .mensaje-flotanteCorrecto {
                 position: fixed;
-                top: 20px;
+                top: 80px;
                 right: 20px;
-                background-color: #66ff66;
+                background-color: #d4edda;
+                color: #155724;
                 padding: 10px 20px;
-                border: 1px solid #f5c6cb;
+                border: 1px solid #c3e6cb;
                 border-radius: 5px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 z-index: 1050;
                 font-size: 14px;
                 animation: fadeIn 0.5s ease-out;
@@ -68,7 +67,7 @@
                 <c:out value="${error}" />
             </div>
         </c:if>
-        
+
         <!-- Mostrar el mensaje de error si existe -->
         <c:if test="${not empty errorCreate}">
             <div id="mensajeFlotante" class="mensaje-flotanteError mt-5">
@@ -256,7 +255,7 @@
             </div>
         </div>
 
-                            
+
         <!-- Modal de Registro -->
         <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -270,26 +269,41 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <label for="nombre" class="form-label">* Nombre</label>
                                     <input type="text" class="form-control" id="nombreRegistro" name="nombre">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label for="apellidos" class="form-label">Apellidos</label>
+                                    <label for="apellidos" class="form-label">* Apellidos</label>
                                     <input type="text" class="form-control" id="apellidos" name="apellidos">
                                 </div>
                             </div>
 
                             <div class="row">
+                                <div class="col-md-6">
+                                    <label for="genero" class="form-label">* Género</label>
+                                    <select class="form-select" id="genero" name="genero">
+                                        <option value="MUJER" ${usuario.genero == 'MUJER' ? 'selected' : ''}>Mujer</option>
+                                        <option value="HOMBRE" ${usuario.genero == 'HOMBRE' ? 'selected' : ''}>Hombre</option>
+                                        <option value="OTRO" ${usuario.genero == 'OTRO' ? 'selected' : ''}>Otro</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                                    <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento">
+                                </div>
+                            </div>
+
+                            <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="dni" class="form-label">DNI</label>
+                                    <label for="dni" class="form-label">* DNI</label>
                                     <input type="text" class="form-control" id="dni" name="dni">
-                                    <p id="mensaje"></p>
                                     <small id="mensajeDNI" class="text-danger"></small>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label for="email" class="form-label">Correo electrónico</label>
+                                    <label for="email" class="form-label">* Correo electrónico</label>
                                     <input type="email" class="form-control" id="email" name="email">
                                     <small id="emailError" class="text-danger"></small>
                                 </div>
@@ -297,21 +311,21 @@
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="password" class="form-label">Contraseña</label>
+                                    <label for="password" class="form-label">* Contraseña</label>
                                     <input type="password" class="form-control" id="passwordRegistro" name="password">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label for="confirmPassword">Confirmar Contraseña</label>
+                                    <label for="confirmPassword">* Confirmar Contraseña</label>
                                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 form-group">
-                                    <label for="avatar">Avatar</label>
+                                    <label for="avatar">Avatar (Se permiten .png, .jpg, .jpeg y menos de 100 KB)</label>
                                     <input type="file" id="avatar" name="avatar" accept="image/*">
-                                    <img class="mt-2" id="vistaPreviaAvatar" alt="Vista previa del avatar">
+                                    <img class="mt-2" id="vistaPreviaAvatar">
                                     <p id="avatarError" style="color: red"></p>
                                 </div>
                             </div>

@@ -1,6 +1,5 @@
 package es.petclinic.DAO;
 
-import es.petclinic.beans.Cliente;
 import es.petclinic.beans.Usuario;
 
 public interface IUsuarioDAO extends IGenericoDAO<Usuario> {
@@ -13,5 +12,13 @@ public interface IUsuarioDAO extends IGenericoDAO<Usuario> {
      * @return Objeto Usuario que tiene ese email.
      */
     public Usuario obtenerPorEmail(String email);
+    
+    /**
+     * 
+     * 
+     * 
+     * @param usuario 
+     */
+    public void insertOrUpdateUsuario(Usuario usuario);
     
 }

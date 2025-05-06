@@ -50,4 +50,24 @@ public class UsuarioDAO extends GenericoDAO<Usuario> implements IUsuarioDAO {
         return usuario;
     }
 
+    @Override
+    public void insertOrUpdateUsuario(Usuario usuario) {
+        try {
+            startTransaction();
+
+            // Verificar si ya existe un usuario con ese ID (o podrías usar email, NIF, etc.)
+            Usuario existingUsuario = session.get(Usuario.class, usuario.getId());
+
+            if (existingUsuario != null) {
+                session.merge(usuario); // Actualiza el usuario existente
+            } else {
+                session.save(usuario); // Inserta nuevo usuario
+            }
+
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+    }
+
 }

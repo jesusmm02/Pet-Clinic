@@ -14,6 +14,15 @@ public interface IClienteDAO extends IGenericoDAO<Cliente> {
     
     /**
      * 
+     * Obtiene un cliente por el idUsuario
+     * 
+     * @param idUsuario IdUsuario del cliente que se quiere buscar
+     * @return Objeto Cliente que tiene el IdUsuario pasado por parámetro
+     */
+    public Cliente getByIdUsuario(int idUsuario);
+    
+    /**
+     * 
      * Obtiene un cliente por DNI
      * 
      * @param dni DNI del cliente que se quiere buscar

@@ -8,7 +8,7 @@ import org.hibernate.Transaction;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 public class VeterinarioDAO extends GenericoDAO<Veterinario> implements IVeterinarioDAO {
-    
+
     protected Session session;
     protected Transaction transaction;
 
@@ -33,5 +33,5 @@ public class VeterinarioDAO extends GenericoDAO<Veterinario> implements IVeterin
         }
         throw he;
     }
-    
+
 }

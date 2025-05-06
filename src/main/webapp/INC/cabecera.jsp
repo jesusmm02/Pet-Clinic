@@ -1,6 +1,13 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+<style>
+    .btn-primary:hover {
+        background-color: #004c99 !important;
+        border-color: #004c99 !important;
+    }
+</style>
+
 <nav class="navbar bg-primary-subtle" style="height: 120px; padding: 0 20px;">
     <div class="container-fluid d-flex justify-content-between align-items-center">
 
@@ -32,10 +39,10 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <button type="button" class="btn btn-outline-primary mr-2" data-bs-toggle="modal" data-bs-target="#modalLogin">
+                    <button type="button" class="btn btn-primary me-4" data-bs-toggle="modal" data-bs-target="#modalLogin">
                         Iniciar Sesi&oacute;n
                     </button>
-                    <button type="button" class="btn btn-outline-primary mr-2" data-bs-toggle="modal" data-bs-target="#modalRegistro">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistro">
                         Registrarse como cliente
                     </button>
                 </c:otherwise>

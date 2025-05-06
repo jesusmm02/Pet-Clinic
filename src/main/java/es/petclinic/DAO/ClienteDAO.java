@@ -41,24 +41,43 @@ public class ClienteDAO extends GenericoDAO<Cliente> implements IClienteDAO {
         try {
             startTransaction();
 
-            // Verificamos si el cliente ya existe en la base de datos (por email o DNI)
-            Query<Cliente> query = session.createQuery("FROM Cliente c WHERE c.email = :email", Cliente.class);
-            query.setParameter("email", cliente.getEmail());
-            Cliente existingCliente = query.uniqueResult();
+            // Buscar si ya existe un cliente con ese ID
+            Query<Cliente> query = session.createQuery("FROM Cliente c WHERE c.id = :idUsuario", Cliente.class);
+            query.setParameter("idUsuario", cliente.getId());
+            Cliente existente = query.uniqueResult();
 
-            if (existingCliente != null) {
-                // Si el cliente ya existe, hacemos una actualización
-                cliente.setId(existingCliente.getId());
-                session.update(cliente);  // Se actualiza el cliente
+            if (existente != null) {
+                // Reutilizamos el objeto existente ya cargado en la sesión
+                existente.setGenero(cliente.getGenero());
+                existente.setFechaNacimiento(cliente.getFechaNacimiento());
+                // otros campos si hicieran falta
+
+                session.merge(existente);
             } else {
-                // Si no existe, se guarda como nuevo
-                session.save(cliente);  // Se guarda el cliente
+                session.save(cliente);
             }
 
             endTransaction();
         } catch (HibernateException he) {
             handleException(he);
         }
+    }
+
+    @Override
+    public Cliente getByIdUsuario(int idUsuario) {
+        Cliente cliente = null;
+        try {
+            this.startTransaction();
+
+            Query<Cliente> query = session.createQuery("FROM Cliente c WHERE c.id = :idUsuario", Cliente.class);
+            query.setParameter("idUsuario", idUsuario);
+            cliente = query.uniqueResult();
+
+            this.endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return cliente;
     }
 
     @Override

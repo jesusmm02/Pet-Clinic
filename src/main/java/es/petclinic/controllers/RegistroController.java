@@ -2,11 +2,10 @@ package es.petclinic.controllers;
 
 import es.petclinic.DAO.ClienteDAO;
 import es.petclinic.DAO.IClienteDAO;
-import es.petclinic.DAO.IUsuarioDAO;
-import es.petclinic.DAO.UsuarioDAO;
-import es.petclinic.beans.Cliente;
 
+import es.petclinic.beans.Cliente;
 import es.petclinic.beans.Usuario;
+import es.petclinic.models.EnumConverter;
 
 import es.petclinic.models.Utils;
 
@@ -32,6 +31,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.converters.DateConverter;
 
 /**
  *
@@ -90,13 +91,22 @@ public class RegistroController extends HttpServlet {
                 // En el caso de que exista error se realizan las siguientes funciones:
                 String aviso = "Las contraseñas no son iguales";
                 if (error.equals("v")) {
-                    aviso = "Todos los campos son obligatorios";
+                    aviso = "Los campos marcados con (*) son obligatorios";
                 }
                 request.setAttribute("errorCreate", aviso);
                 url = ".";  // Volver al formulario de registro
             } else { // Si no hay errores
                 try {
                     cliente = new Cliente();  // Usamos la clase Cliente
+                    
+                    // Registrar el convertidor para Enum de genero
+                    ConvertUtils.register(new EnumConverter(), Cliente.Genero.class);
+
+                    // Manejar la conversión de la fecha de nacimiento
+                    DateConverter dateConverter = new DateConverter(null);
+                    dateConverter.setPattern("yyyy-MM-dd"); // Formato de la fecha
+                    ConvertUtils.register(dateConverter, java.util.Date.class);
+                    ConvertUtils.register(dateConverter, java.sql.Date.class);
 
                     // Poblar los datos comunes de Usuario y los específicos de Cliente
                     BeanUtils.populate(cliente, request.getParameterMap());

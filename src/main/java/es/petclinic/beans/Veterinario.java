@@ -10,7 +10,7 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "veterinarios")
-@PrimaryKeyJoinColumn(name="IdUsuario", foreignKey=@ForeignKey(name = "FK_veterinarios_usuarios")) // Clave primaria heredada
+@PrimaryKeyJoinColumn(name="IdUsuario", foreignKey= @ForeignKey(name = "FK_veterinarios_usuarios")) // Clave primaria heredada
 public class Veterinario extends Usuario implements Serializable {
     
     @Type(type = "true_false")

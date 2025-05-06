@@ -2,13 +2,16 @@ package es.petclinic.DAO;
 
 import es.petclinic.beans.Mascota;
 import es.petclinic.persistence.HibernateUtil;
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 public class MascotaDAO extends GenericoDAO<Mascota> implements IMascotaDAO {
-    
+
     protected Session session;
     protected Transaction transaction;
 
@@ -33,5 +36,82 @@ public class MascotaDAO extends GenericoDAO<Mascota> implements IMascotaDAO {
         }
         throw he;
     }
+
+    @Override
+    public Mascota getById(int id) {
+        Mascota mascota = null;
+        try {
+            startTransaction();
+
+            mascota = session.get(Mascota.class, id);
+
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return mascota;
+    }
+
+    @Override
+    public List<Mascota> getMascotasByIdCliente(int idCliente) {
+        List<Mascota> mascotas = new ArrayList<>();
+        try {
+            startTransaction();
+
+            Query<Mascota> query = session.createQuery(
+                    "FROM Mascota m WHERE m.propietario.id = :idCliente", Mascota.class
+            );
+            query.setParameter("idCliente", idCliente);
+
+            mascotas = query.getResultList();
+
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return mascotas;
+    }
+
+    @Override
+    public void insertarMascota(Mascota mascota) {
+        try {
+            startTransaction();
+            session.save(mascota);
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+    }
     
+    @Override
+    public void actualizarMascota(Mascota mascota) {
+        try {
+            startTransaction();
+            session.update(mascota);
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+            throw he;
+        }
+    }
+
+
+    @Override
+    public void eliminarMascota(int id) {
+        try {
+            startTransaction();
+
+            // Buscar la mascota antes de eliminarla
+            Mascota mascota = session.get(Mascota.class, id);
+
+            if (mascota != null) {
+                session.delete(mascota);
+            }
+
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+    }
+
 }
