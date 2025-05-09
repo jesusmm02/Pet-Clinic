@@ -2,11 +2,15 @@ package es.petclinic.beans;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -29,7 +33,10 @@ public class Cliente extends Usuario implements Serializable {
     @Column(name="FechaNacimiento", nullable = true)
     private Date fechaNacimiento;
     
+    @OneToMany(mappedBy = "propietario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Mascota> mascotas;
     
+   
     
     // CONSTRUCTORES
 
@@ -53,12 +60,21 @@ public class Cliente extends Usuario implements Serializable {
         return fechaNacimiento;
     }
 
+    public List<Mascota> getMascotas() {
+        return mascotas;
+    }
+    
+
     public void setGenero(Genero genero) {
         this.genero = genero;
     }
 
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public void setMascotas(List<Mascota> mascotas) {
+        this.mascotas = mascotas;
     }
     
 }

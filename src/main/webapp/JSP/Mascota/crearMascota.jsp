@@ -9,36 +9,10 @@
         <title>Registrar Mascota - Pet Clinic</title>
         <link rel="stylesheet" href="${bootstrap}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
         <script src="${contexto}/JS/validarAvatarMascota.js" defer></script>
         <script src="${contexto}/JS/vistaAvatarMascota.js" defer></script>
-        <style>
-            .mensaje-flotanteError {
-                position: fixed;
-                top: 80px;
-                right: 20px;
-                background-color: #f8d7da;
-                color: #721c24;
-                padding: 10px 20px;
-                border: 1px solid #f5c6cb;
-                border-radius: 5px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                z-index: 1050;
-                font-size: 14px;
-                animation: fadeIn 0.5s ease-out;
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(-10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        </style>
     </head>
     <body>
 

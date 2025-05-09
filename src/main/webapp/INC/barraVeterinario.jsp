@@ -4,26 +4,26 @@
 <html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Panel de Cliente - Pet Clinic</title>
+        <title>Panel de Veterinario - Pet Clinic</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
         <style>
 
-            .navbar-cliente {
+            .navbar-veterinario {
                 background-color: #e1f1f7;
             }
 
-            .navbar-cliente .navbar-brand {
+            .navbar-veterinario .navbar-brand {
                 font-size: 1.8rem;
                 font-weight: bold;
                 color: #4a7c68;
             }
 
-            .navbar-cliente .navbar-brand img {
+            .navbar-veterinario .navbar-brand img {
                 max-width: 30px;
                 margin-right: 10px;
             }
 
-            .navbar-cliente .nav-pills .nav-link {
+            .navbar-veterinario .nav-pills .nav-link {
                 border-radius: 0.25rem;
                 font-size: 16px;
                 font-weight: 500;
@@ -34,100 +34,81 @@
                 background-color: transparent;
             }
 
-            .navbar-cliente .nav-pills .nav-link:hover {
+            .navbar-veterinario .nav-pills .nav-link:hover {
                 background-color: #007bff;
                 color: #fff;
                 text-decoration: underline;
             }
 
-            .navbar-cliente .nav-pills .nav-link.active {
+            .navbar-veterinario .nav-pills .nav-link.active {
                 background-color: #0056b3;
                 color: #fff;
                 border: 2px solid #003d73;
             }
 
-            .navbar-cliente .nav-pills {
+            .navbar-veterinario .nav-pills {
                 margin-bottom: 20px;
             }
 
-            .navbar-cliente .card {
+            .navbar-veterinario .card {
                 margin-bottom: 20px;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 border-radius: 10px;
             }
 
-            .navbar-cliente .card-body {
+            .navbar-veterinario .card-body {
                 padding: 20px;
             }
 
-            .navbar-cliente .card .btn-block {
+            .navbar-veterinario .card .btn-block {
                 width: 100%;
             }
 
-            .navbar-cliente .btn-success {
+            .navbar-veterinario .btn-success {
                 background-color: #4a7c68;
                 border-color: #4a7c68;
             }
 
-            .navbar-cliente .btn-primary {
+            .navbar-veterinario .btn-primary {
                 background-color: #007bff;
                 border-color: #007bff;
             }
 
-            .navbar-cliente .btn-warning {
+            .navbar-veterinario .btn-warning {
                 background-color: #ffcb01;
                 border-color: #ffcb01;
             }
 
-            .navbar-cliente .btn-info {
+            .navbar-veterinario .btn-info {
                 background-color: #00aaff;
                 border-color: #00aaff;
             }
-
 
         </style>
     </head>
     <body>
 
         <!-- Barra de navegación -->
-        <nav class="navbar navbar-expand-lg navbar-light navbar-cliente">
+        <nav class="navbar navbar-expand-lg navbar-light navbar-veterinario">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <form action="ClienteController" method="POST">
-                                <input type="hidden" name="accion" value="gestionMascotas">
-                                <button type="submit" class="nav-link">Tus Mascotas</button>
+                            <form action="VeterinarioController" method="POST">
+                                <input type="hidden" name="accion" value="verClientes">
+                                <button type="submit" class="nav-link">Ver Clientes</button>
                             </form>
                         </li>
                         <li class="nav-item">
-                            <form action="ClienteController" method="POST">
-                                <input type="hidden" name="accion" value="solicitarCita">
-                                <button type="submit" class="nav-link">Cita</button>
-                            </form>
-                        </li>
-                        <li class="nav-item">
-                            <form action="ClienteController" method="POST">
+                            <form action="VeterinarioController" method="POST">
                                 <input type="hidden" name="accion" value="historialMedico">
-                                <button type="submit" class="nav-link">Historial médico</button>
+                                <button type="submit" class="nav-link">Historiales médicos</button>
                             </form>
                         </li>
                         <li class="nav-item">
-                            <form action="ClienteController" method="POST">
-                                <input type="hidden" name="accion" value="verServicios">
-                                <button type="submit" class="nav-link">Servicios disponibles</button>
-                            </form>
-                        </li>
-                        <li class="nav-item">
-                            <form action="ClienteController" method="POST">
-                                <input type="hidden" name="accion" value="verInfografia">
-                                <button type="submit" class="nav-link">Infografías</button>
-                            </form>
-                        </li>
-                        <li class="nav-item">
-                            <form action="ClienteController" method="POST">
-                                <input type="hidden" name="accion" value="editarPerfil">
-                                <button type="submit" class="nav-link">Editar perfil</button>
+                            <form action="VeterinarioController" method="POST">
+                                <input type="hidden" name="accion" value="citas">
+                                <button type="submit" class="nav-link">Ver citas</button>
                             </form>
                         </li>
                     </ul>

@@ -99,7 +99,7 @@ public class Utils {
 
         // Lista de campos obligatorios
         String[] camposCriticos = {
-            "nombre", "apellidos", "dni", "email", "password", "confirmPassword"
+            "nombre", "apellidos", "numIdentificacion", "email", "password", "confirmPassword"
         };
 
         for (String campo : camposCriticos) {

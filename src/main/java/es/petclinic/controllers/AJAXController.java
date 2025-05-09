@@ -72,20 +72,18 @@ public class AJAXController extends HttpServlet {
                     }
                     break;
                     
-                case "comprobarDNI":
-                    String dni = request.getParameter("dni");
+                case "comprobarIdentificacion":
+                    String numIdentificacion = request.getParameter("numIdentificacion");
 
-                    // Verificar si el DNI ya está registrado
-                    IClienteDAO clienteDAO = new ClienteDAO();
-                    Cliente clienteExistente = clienteDAO.getByDNI(dni);
+                    // Verificar si el número de identificación ya está registrado
+                    usuarioDAO = new UsuarioDAO();
+                    usuarioExistente = usuarioDAO.obtenerPorNumIdentificacion(numIdentificacion);
 
-                    // Si el DNI ya está registrado, respondemos con "existe"
-                    if (clienteExistente != null) {
-                        response.setContentType("text/plain");
+                    // Responder con "existe" si el número ya está registrado, "disponible" si no
+                    response.setContentType("text/plain");
+                    if (usuarioExistente != null) {
                         response.getWriter().write("existe");
                     } else {
-                        // Si el DNI no está registrado, respondemos con "disponible"
-                        response.setContentType("text/plain");
                         response.getWriter().write("disponible");
                     }
                     break;

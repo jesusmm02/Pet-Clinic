@@ -1,18 +1,19 @@
-const URL = "AJAXController";
-
 $(document).ready(function () {
-    $("#dni").on("blur", function () {
-        var dni = $(this).val().trim();
-        if (dni !== "") {
+    $("#identificacionInput").on("blur", function () {
+        var numIdentificacion = $(this).val().trim();
+        if (numIdentificacion !== "") {
             $.ajax({
-                url: URL, // URL del controlador
+                url: "AJAXController",
                 method: "POST",
-                data: { accion: "comprobarDNI", dni: dni }, // Verifica el DNI
+                data: { 
+                    accion: "comprobarIdentificacion", // Acción para comprobar DNI o NIE
+                    numIdentificacion: numIdentificacion // Solo enviamos el número de identificación
+                },
                 success: function (response) {
                     if (response.trim() === "existe") {
                         // Crear mensaje flotante dinámico
                         var mensajeFlotante = $("<div class='mensaje-flotanteError mt-5'></div>");
-                        mensajeFlotante.text("⚠️ El DNI ya está registrado.");
+                        mensajeFlotante.text("⚠️ El número de identificación ya está registrado.");
 
                         // Añadir mensaje al body
                         $("body").append(mensajeFlotante);
@@ -27,12 +28,12 @@ $(document).ready(function () {
                             });
                         }, 3000);
                     } else {
-                        // Si el DNI es válido, habilitar el botón de registro
+                        // Si el número de identificación es válido, habilitar el botón de registro
                         $("#btnRegistrar").prop("disabled", false);
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error("❌ Error en AJAX comprobarDNI:", error);
+                    console.error("❌ Error en AJAX comprobarIdentificacion:", error);
                 }
             });
         }

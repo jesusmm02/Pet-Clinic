@@ -27,6 +27,14 @@ public interface IMascotaDAO extends IGenericoDAO<Mascota> {
      * 
      * 
      * 
+     * @return 
+     */
+    public List<Mascota> getAllMascotas();
+    
+    /**
+     * 
+     * 
+     * 
      * @param mascota 
      */
     public void insertarMascota(Mascota mascota);

@@ -11,52 +11,13 @@
         <title>Pet Clinic</title>
         <link rel="stylesheet" href="${bootstrap}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
         <script src="${contexto}/JS/comprobarEmail.js" defer></script>
-        <script src="${contexto}/JS/comprobarDNI.js" defer></script>
+        <script src="${contexto}/JS/validarNumIdentificacion.js" defer></script>
+        <script src="${contexto}/JS/comprobarNumIdentificacion.js" defer></script>
         <script src="${contexto}/JS/validarAvatar.js" defer></script>
         <script src="${contexto}/JS/vistaAvatar.js" defer></script>
-        <style>
-            .mensaje-flotanteError {
-                position: fixed;
-                top: 80px;
-                right: 20px;
-                background-color: #f8d7da;
-                color: #721c24;
-                padding: 10px 20px;
-                border: 1px solid #f5c6cb;
-                border-radius: 5px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                z-index: 1050;
-                font-size: 14px;
-                animation: fadeIn 0.5s ease-out;
-            }
-
-            .mensaje-flotanteCorrecto {
-                position: fixed;
-                top: 80px;
-                right: 20px;
-                background-color: #d4edda;
-                color: #155724;
-                padding: 10px 20px;
-                border: 1px solid #c3e6cb;
-                border-radius: 5px;
-                z-index: 1050;
-                font-size: 14px;
-                animation: fadeIn 0.5s ease-out;
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(-10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        </style>
     </head>
     <body>
 
@@ -267,19 +228,19 @@
                         </div>
 
                         <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
+                            <div class="row g-3">
+                                <div class="col-md-6">
                                     <label for="nombre" class="form-label">* Nombre</label>
                                     <input type="text" class="form-control" id="nombreRegistro" name="nombre">
                                 </div>
 
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6">
                                     <label for="apellidos" class="form-label">* Apellidos</label>
                                     <input type="text" class="form-control" id="apellidos" name="apellidos">
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row g-3 mt-2">
                                 <div class="col-md-6">
                                     <label for="genero" class="form-label">* Género</label>
                                     <select class="form-select" id="genero" name="genero">
@@ -295,34 +256,44 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="dni" class="form-label">* DNI</label>
-                                    <input type="text" class="form-control" id="dni" name="dni">
-                                    <small id="mensajeDNI" class="text-danger"></small>
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-6">
+                                    <label for="tipoIdentificacion" class="form-label">* Tipo de Documento</label>
+                                    <select class="form-select" id="tipoIdentificacion" name="tipoIdentificacion">
+                                        <option value="DNI" selected>DNI</option>
+                                        <option value="NIE">NIE</option>
+                                    </select>
                                 </div>
 
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6">
+                                    <label for="identificacionInput" class="form-label">* Número de identificación</label>
+                                    <input type="text" class="form-control" id="identificacionInput" name="numIdentificacion" placeholder="Introduce tu DNI o NIE">
+                                </div>
+                            </div>
+
+
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-12">
                                     <label for="email" class="form-label">* Correo electrónico</label>
                                     <input type="email" class="form-control" id="email" name="email">
                                     <small id="emailError" class="text-danger"></small>
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-6">
                                     <label for="password" class="form-label">* Contraseña</label>
                                     <input type="password" class="form-control" id="passwordRegistro" name="password">
                                 </div>
 
-                                <div class="col-md-6 mb-3">
-                                    <label for="confirmPassword">* Confirmar Contraseña</label>
+                                <div class="col-md-6">
+                                    <label for="confirmPassword" class="form-label">* Confirmar Contraseña</label>
                                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6 form-group">
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-12">
                                     <label for="avatar">Avatar (Se permiten .png, .jpg, .jpeg y menos de 100 KB)</label>
                                     <input type="file" id="avatar" name="avatar" accept="image/*">
                                     <img class="mt-2" id="vistaPreviaAvatar">

@@ -2,6 +2,7 @@ package es.petclinic.DAO;
 
 import es.petclinic.beans.Cliente;
 import es.petclinic.persistence.HibernateUtil;
+import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -96,6 +97,26 @@ public class ClienteDAO extends GenericoDAO<Cliente> implements IClienteDAO {
             handleException(he);
         }
         return cliente;
+    }
+
+    @Override
+    public List<Cliente> obtenerClientesConMascotas() {
+        List<Cliente> listaClientes = null;
+        try {
+            this.startTransaction();
+
+            Query<Cliente> query = session.createQuery(
+                "SELECT DISTINCT c FROM Cliente c LEFT JOIN FETCH c.mascotas", 
+                Cliente.class
+            );
+
+            listaClientes = query.getResultList();
+
+            this.endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return listaClientes;
     }
 
 }

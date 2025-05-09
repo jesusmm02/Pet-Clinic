@@ -71,6 +71,26 @@ public class MascotaDAO extends GenericoDAO<Mascota> implements IMascotaDAO {
         }
         return mascotas;
     }
+    
+    @Override
+    public List<Mascota> getAllMascotas() {
+        List<Mascota> mascotas = null;
+
+        try {
+            startTransaction();
+
+            // HQL para obtener todas las mascotas
+            Query<Mascota> query = session.createQuery("FROM Mascota", Mascota.class);
+            mascotas = query.list();
+
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+
+        return mascotas;
+    }
+
 
     @Override
     public void insertarMascota(Mascota mascota) {

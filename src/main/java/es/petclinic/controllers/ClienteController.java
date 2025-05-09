@@ -1,14 +1,20 @@
 package es.petclinic.controllers;
 
 import es.petclinic.DAO.ClienteDAO;
+import es.petclinic.DAO.HistorialMedicoDAO;
 import es.petclinic.DAO.IClienteDAO;
+import es.petclinic.DAO.IHistorialMedicoDAO;
 import es.petclinic.DAO.IMascotaDAO;
+import es.petclinic.DAO.IServicioDAO;
 import es.petclinic.DAO.IUsuarioDAO;
 import es.petclinic.DAO.MascotaDAO;
+import es.petclinic.DAO.ServicioDAO;
 import es.petclinic.DAO.UsuarioDAO;
 
 import es.petclinic.beans.Cliente;
+import es.petclinic.beans.HistorialMedico;
 import es.petclinic.beans.Mascota;
+import es.petclinic.beans.Servicio;
 import es.petclinic.beans.Usuario;
 
 import es.petclinic.models.EnumConverter;
@@ -17,6 +23,7 @@ import es.petclinic.models.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -72,7 +79,7 @@ public class ClienteController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String url = "JSP/Cliente/cliente.jsp"; // Página a la que se redirige por defecto
+        String url = "JSP/Cliente/cliente.jsp";
         String accion = request.getParameter("accion");
 
         switch (accion) {
@@ -96,7 +103,41 @@ public class ClienteController extends HttpServlet {
                 url = "JSP/Cliente/solicitarCita.jsp";
                 break;
             case "historialMedico":
+                try {
+                // Recuperar el cliente de la sesión
+                Usuario cliente = (Usuario) request.getSession().getAttribute("usuario");
+
+                if (cliente != null) {
+                    // Obtener todas las mascotas del cliente
+                    MascotaDAO mascotaDAO = new MascotaDAO();
+                    List<Mascota> listaMascotas = mascotaDAO.getMascotasByIdCliente(cliente.getId());
+
+                    // Obtener todos los historiales asociados a esas mascotas
+                    IHistorialMedicoDAO historialDAO = new HistorialMedicoDAO();
+                    List<HistorialMedico> listaHistoriales = new ArrayList<>();
+
+                    for (Mascota mascota : listaMascotas) {
+                        List<HistorialMedico> historialesMascota = historialDAO.getHistorialesByIdMascota(mascota.getId());
+                        listaHistoriales.addAll(historialesMascota);
+                    }
+
+                    // Pasar los datos a la vista
+                    request.setAttribute("listaHistoriales", listaHistoriales);
+                    request.setAttribute("listaMascotas", listaMascotas);
+                }
+
                 url = "JSP/Cliente/historialMedico.jsp";
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            break;
+            case "verServicios":
+                IServicioDAO servicioDAO = new ServicioDAO();
+                List<Servicio> listaServicios = servicioDAO.obtenerServicios();
+                request.setAttribute("listaServicios", listaServicios);
+                url = "JSP/Cliente/servicios.jsp";
                 break;
             case "verInfografia":
                 url = "JSP/Cliente/infografia.jsp";
@@ -133,15 +174,14 @@ public class ClienteController extends HttpServlet {
                     String apellidos = request.getParameter("apellidos");
 
                     // Validación de campos obligatorios
-                    if (nombre == null || nombre.trim().isEmpty() || 
-                        apellidos == null || apellidos.trim().isEmpty()) {
+                    if (nombre == null || nombre.trim().isEmpty()
+                            || apellidos == null || apellidos.trim().isEmpty()) {
 
                         request.setAttribute("error", "Todos los campos marcados (*) son obligatorios");
                         request.getRequestDispatcher("JSP/Cliente/editarPerfil.jsp").forward(request, response);
                         return;
                     }
-                    
-                    
+
                     // Actualizar campos del usuario
                     usuario.setNombre(nombre);
                     usuario.setApellidos(apellidos);

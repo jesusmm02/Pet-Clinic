@@ -21,10 +21,10 @@
         <c:if test="${not empty error}">
             <div id="mensajeFlotante" class="mensaje-flotante">
                 <c:choose>
-                        <c:when test="${not empty error}">
-                            ${error}
-                        </c:when>
-                    </c:choose>
+                    <c:when test="${not empty error}">
+                        ${error}
+                    </c:when>
+                </c:choose>
             </div>
             
             
@@ -82,8 +82,8 @@
                         <input type="email" class="form-control" value="${usuario.email}" readonly>
                     </div>
                     <div class="form-group col-md-6">
-                        <label><strong>DNI</strong></label>
-                        <input type="text" class="form-control" value="${usuario.dni}" readonly>
+                        <label><strong>Número de identificación</strong></label>
+                        <input type="text" class="form-control" value="${usuario.numIdentificacion}" readonly>
                     </div>
                 </div>
 

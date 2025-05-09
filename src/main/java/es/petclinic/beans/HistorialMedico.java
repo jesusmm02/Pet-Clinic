@@ -25,7 +25,7 @@ public class HistorialMedico implements Serializable {
     @Column(name = "IdHistorial")
     private Integer id;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "Fecha", nullable = false)
     private Date fecha;
 
@@ -39,11 +39,6 @@ public class HistorialMedico implements Serializable {
     @JoinColumn(name = "IdMascota", nullable = false,
                 foreignKey = @ForeignKey(name = "FK_historialesMedicos_mascotas"))
     private Mascota mascota;
-
-    @ManyToOne
-    @JoinColumn(name = "IdVeterinario", nullable = false,
-                foreignKey = @ForeignKey(name = "FK_historialesMedicos_veterinarios"))
-    private Usuario veterinario;
     
     
     
@@ -52,13 +47,12 @@ public class HistorialMedico implements Serializable {
     public HistorialMedico() {
     }
 
-    public HistorialMedico(Integer id, Date fecha, String descripcion, String tratamiento, Mascota mascota, Usuario veterinario) {
+    public HistorialMedico(Integer id, Date fecha, String descripcion, String tratamiento, Mascota mascota) {
         this.id = id;
         this.fecha = fecha;
         this.descripcion = descripcion;
         this.tratamiento = tratamiento;
         this.mascota = mascota;
-        this.veterinario = veterinario;
     }
     
     
@@ -85,10 +79,6 @@ public class HistorialMedico implements Serializable {
         return mascota;
     }
 
-    public Usuario getVeterinario() {
-        return veterinario;
-    }
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -107,10 +97,6 @@ public class HistorialMedico implements Serializable {
 
     public void setMascota(Mascota mascota) {
         this.mascota = mascota;
-    }
-
-    public void setVeterinario(Usuario veterinario) {
-        this.veterinario = veterinario;
     }
 
 }

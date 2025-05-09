@@ -15,11 +15,12 @@
     <body>
 
         <%@ include file="/INC/cabecera.jsp" %>
+        <%@ include file="/INC/barraVeterinario.jsp" %>
 
         <div class="container my-5">
             <!-- Apartado 1: Bienvenida personalizada -->
             <div class="mb-5 text-center">
-                <h2 class="text-primary">¡Hola, Dr. González!</h2>
+                <h2 class="text-primary">¡Hola, Dr. Vidal!</h2>
                 <p class="lead">Estas son tus actividades para hoy.</p>
                 <!-- Imagen de bienvenida -->
                 <img src="${contexto}/IMG/veterinario_banner.jpg" class="img-fluid rounded shadow my-3" alt="Bienvenido Veterinario">

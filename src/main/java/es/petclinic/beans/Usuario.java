@@ -19,7 +19,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "usuarios", uniqueConstraints = { // Campos que no pueden tener valores repetidos
-    @UniqueConstraint(columnNames = "Dni", name = "UK_usuario_dni"),
+    @UniqueConstraint(columnNames = "NumIdentificacion", name = "UK_usuario_numIdentificacion"),
     @UniqueConstraint(columnNames = "Email", name = "UK_usuario_email")
 })
 @Inheritance(strategy = InheritanceType.JOINED) // Herencia entre clases
@@ -36,8 +36,8 @@ public class Usuario implements Serializable {
     @Column(name = "Apellidos", length = 60)
     private String apellidos;
     
-    @Column(name = "DNI", length = 9, nullable = false)
-    private String dni;
+    @Column(name = "NumIdentificacion", length = 9, nullable = false)
+    private String numIdentificacion;
     
     @Column(name = "Email", length = 80, nullable = false)
     private String email;
@@ -67,11 +67,11 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
-    public Usuario(Integer id, String nombre, String apellidos, String dni, String email, String password, Rol rol, Date ultimoAcceso) {
+    public Usuario(Integer id, String nombre, String apellidos, String numIdentificacion, String email, String password, Rol rol, Date ultimoAcceso) {
         this.id = id;
         this.nombre = nombre;
         this.apellidos = apellidos;
-        this.dni = dni;
+        this.numIdentificacion = numIdentificacion;
         this.email = email;
         this.password = password;
         this.rol = rol;
@@ -94,8 +94,8 @@ public class Usuario implements Serializable {
         return apellidos;
     }
 
-    public String getDni() {
-        return dni;
+    public String getNumIdentificacion() {
+        return numIdentificacion;
     }
 
     public String getEmail() {
@@ -130,8 +130,8 @@ public class Usuario implements Serializable {
         this.apellidos = apellidos;
     }
 
-    public void setDni(String dni) {
-        this.dni = dni;
+    public void setNumIdentificacion(String numIdentificacion) {
+        this.numIdentificacion = numIdentificacion;
     }
 
     public void setEmail(String email) {

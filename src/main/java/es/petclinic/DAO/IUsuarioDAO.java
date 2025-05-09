@@ -17,6 +17,15 @@ public interface IUsuarioDAO extends IGenericoDAO<Usuario> {
      * 
      * 
      * 
+     * @param numIdentificacion
+     * @return 
+     */
+    public Usuario obtenerPorNumIdentificacion(String numIdentificacion);
+    
+    /**
+     * 
+     * 
+     * 
      * @param usuario 
      */
     public void insertOrUpdateUsuario(Usuario usuario);

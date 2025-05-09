@@ -49,6 +49,27 @@ public class UsuarioDAO extends GenericoDAO<Usuario> implements IUsuarioDAO {
         }
         return usuario;
     }
+    
+    @Override
+    public Usuario obtenerPorNumIdentificacion(String numIdentificacion) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Usuario usuario = null;
+
+        try {
+            String hql = "FROM Usuario WHERE numIdentificacion = :numIdentificacion";
+            Query query = session.createQuery(hql);
+            query.setParameter("numIdentificacion", numIdentificacion);
+            
+            // Ejecutar la consulta
+            usuario = (Usuario) query.uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return usuario;
+    }
 
     @Override
     public void insertOrUpdateUsuario(Usuario usuario) {
