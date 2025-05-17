@@ -34,6 +34,24 @@ public class UsuarioDAO extends GenericoDAO<Usuario> implements IUsuarioDAO {
         }
         throw he;
     }
+    
+    @Override
+    public Usuario getById(int idUsuario) {
+        Usuario usuario = null;
+        try {
+            startTransaction();
+
+            Query<Usuario> query = session.createQuery("FROM Usuario u WHERE u.id = :idUsuario", Usuario.class);
+            query.setParameter("idUsuario", idUsuario);
+
+            usuario = query.uniqueResult(); // Obtenemos el usuario
+
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return usuario;
+    }
 
     @Override
     public Usuario obtenerPorEmail(String email) {

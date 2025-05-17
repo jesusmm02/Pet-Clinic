@@ -83,6 +83,11 @@ public class ClienteController extends HttpServlet {
         String accion = request.getParameter("accion");
 
         switch (accion) {
+            case "homeCliente":
+
+                url = "JSP/Cliente/cliente.jsp";
+                
+                break;
             case "gestionMascotas":
 
                 HttpSession sessionMascotas = request.getSession(false);
@@ -258,6 +263,9 @@ public class ClienteController extends HttpServlet {
                     try {
                         usuDAO.insertOrUpdateUsuario(usuario);
                         clienteDAO.insertOrUpdateCliente(cliente);
+                        
+                        usuario = usuDAO.getById(usuario.getId());
+                        cliente = clienteDAO.getByIdUsuario(usuario.getId());
 
                         request.setAttribute("editado", "Perfil actualizado correctamente.");
                         session.setAttribute("usuario", usuario);

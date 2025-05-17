@@ -14,8 +14,7 @@
         <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
         <script src="${contexto}/JS/comprobarEmail.js" defer></script>
-        <script src="${contexto}/JS/validarNumIdentificacion.js" defer></script>
-        <script src="${contexto}/JS/comprobarNumIdentificacion.js" defer></script>
+        <script src="${contexto}/JS/numIdentificacion.js" defer></script>
         <script src="${contexto}/JS/validarAvatar.js" defer></script>
         <script src="${contexto}/JS/vistaAvatar.js" defer></script>
     </head>
@@ -268,6 +267,7 @@
                                 <div class="col-md-6">
                                     <label for="identificacionInput" class="form-label">* Número de identificación</label>
                                     <input type="text" class="form-control" id="identificacionInput" name="numIdentificacion" placeholder="Introduce tu DNI o NIE">
+                                    <p id="mensajeIdentificacion" class="text-danger" style="display: none"></p>
                                 </div>
                             </div>
 
@@ -295,8 +295,15 @@
                             <div class="row g-3 mt-2">
                                 <div class="col-md-12">
                                     <label for="avatar">Avatar (Se permiten .png, .jpg, .jpeg y menos de 100 KB)</label>
-                                    <input type="file" id="avatar" name="avatar" accept="image/*">
-                                    <img class="mt-2" id="vistaPreviaAvatar">
+                                    
+                                    <div class="d-flex gap-3 align-items-start mt-2">
+                                        <input type="file" id="avatar" name="avatar" accept="image/*">
+                                    </div>
+                                    
+                                    <div class="mt-3 border p-2 rounded bg-light text-center" style="max-width: 150px;">
+                                        <img class="img-fluid rounded-circle" id="vistaPreviaAvatar" style="max-width: 150px; max-height: 150px;">
+                                    </div>
+
                                     <p id="avatarError" style="color: red"></p>
                                 </div>
                             </div>

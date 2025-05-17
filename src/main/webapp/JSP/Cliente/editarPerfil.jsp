@@ -1,8 +1,9 @@
 <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="/INC/metas.inc"/>
@@ -11,64 +12,21 @@
         <script src="${contexto}/JS/validarAvatar.js" defer></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
+        <script src="${contexto}/JS/vistaAvatarEditar.js" defer></script>
+        
     </head>
     <body>
 
         <%@ include file="/INC/cabecera.jsp" %>
-
         <%@ include file="/INC/barraCliente.jsp" %>
         
+        
         <c:if test="${not empty error}">
-            <div id="mensajeFlotante" class="mensaje-flotante">
-                <c:choose>
-                    <c:when test="${not empty error}">
-                        ${error}
-                    </c:when>
-                </c:choose>
+            <div id="mensajeFlotante" class="mensaje-flotanteError mt-5">
+                <c:out value="${error}" />
             </div>
-            
-            
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    var mensaje = document.getElementById('mensajeFlotante');
-                    if (mensaje) {
-                        setTimeout(function () {
-                            mensaje.style.opacity = '0';
-                            setTimeout(function () {
-                                mensaje.remove();
-                            }, 1000);
-                        }, 3000);
-                    }
-                });
-            </script>
-            <style>
-                .mensaje-flotante {
-                    position: absolute;
-                    right: 20px;
-                    margin-top: 10px;
-                    background-color: #f8d7da;
-                    color: #721c24;
-                    padding: 10px 20px;
-                    border: 1px solid #f5c6cb;
-                    border-radius: 5px;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                    z-index: 1050;
-                    font-size: 14px;
-                    animation: link 0.5s ease-out;
-                }
-
-                @keyframes link {
-                    from {
-                        opacity: 0;
-                        transform: translateY(-10px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-            </style>
         </c:if>
+
 
         <div class="container mt-5">
             <h2>Editar Perfil</h2>
@@ -111,7 +69,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label><strong>Fecha de nacimiento:</strong></label>
-                        <input type="date" name="fechaNacimiento" class="form-control" value="${cliente.fechaNacimiento}">
+                        <input type="date" class="form-control" name="fechaNacimiento" value="<fmt:formatDate value='${usuario.fechaNacimiento}' pattern='yyyy-MM-dd' />">
                     </div>
                 </div>
 
@@ -136,14 +94,21 @@
                     <div class="form-group col-md-6 text-center">
                         <label for="avatar">
                             <c:if test="${not empty usuario.avatar}">
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label><strong>Avatar Actual</strong></label>
-                                    <p>${usuario.avatar}</p> <!-- Nombre del avatar actual -->
+                                    <div class="border p-3 rounded bg-light">
+                                        <img 
+                                            src="${pageContext.request.contextPath}/IMG/avatares/${usuario.avatar}"
+                                            class="img-fluid rounded-circle" 
+                                            id="vistaPreviaAvatar" 
+                                            style="max-width: 150px; max-height: 150px;">
+                                    </div>
                                 </div>
                             </c:if>
                         </label>
+
                         <div class="border p-3 rounded bg-light">
-                            <input type="file" id="avatar" name="avatar" accept="image/*" value="${usuario.avatar}" class="form-control-file mx-auto">
+                            <input type="file" id="avatar" name="avatar" accept="image/*" class="form-control-file mx-auto">
                         </div>
                         <p id="avatarError" style="color: red"></p>
                     </div>

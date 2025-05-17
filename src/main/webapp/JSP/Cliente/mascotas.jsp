@@ -42,6 +42,30 @@
 
         <%@ include file="/INC/cabecera.jsp" %>
         <%@ include file="/INC/barraCliente.jsp" %>
+        
+        <c:if test="${not empty creada}">
+            <div id="mensajeFlotante" class="mensaje-flotanteCorrecto mt-5">
+                <c:out value="${creada}" />
+            </div>
+        </c:if>
+        
+        <c:if test="${not empty editada}">
+            <div id="mensajeFlotante" class="mensaje-flotanteCorrecto mt-5">
+                <c:out value="${editada}" />
+            </div>
+        </c:if>
+        
+        <c:if test="${not empty eliminada}">
+            <div id="mensajeFlotante" class="mensaje-flotanteCorrecto mt-5">
+                <c:out value="${eliminada}" />
+            </div>
+        </c:if>
+        
+        <c:if test="${not empty error}">
+            <div id="mensajeFlotante" class="mensaje-flotanteError mt-5">
+                <c:out value="${error}" />
+            </div>
+        </c:if>
 
         <div class="container mt-4">
             <h2 class="mb-4">Tus Mascotas</h2>

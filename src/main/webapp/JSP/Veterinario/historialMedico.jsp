@@ -12,6 +12,14 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
+        <script>
+            function limpiarFiltros() {
+                // Restablecer todos los select a su valor por defecto
+                document.getElementById('dueño').selectedIndex = 0;
+                document.getElementById('especie').selectedIndex = 0;
+                document.getElementById('raza').selectedIndex = 0;
+            }
+        </script>
     </head>
     <body>
 
@@ -30,8 +38,64 @@
             </div>
         </c:if>
 
+        <c:if test="${not empty errorHistorial}">
+            <div id="mensajeFlotante" class="mensaje-flotanteError mt-5">
+                <c:out value="${errorHistorial}" />
+            </div>
+        </c:if>
+
         <div class="container mt-5">
             <h2 class="text-center text-primary mb-4">Historial Médico de Mascotas</h2>
+
+            <!-- Filtros -->
+            <form action="VeterinarioController" method="POST" class="mb-4">
+                <input type="hidden" name="accion" value="filtrarHistoriales">
+
+                <div class="row g-3">
+                    <!-- Filtro de dueño -->
+                    <div class="col-md-4">
+                        <label for="dueño" class="form-label">Dueño:</label>
+                        <select class="form-select" id="dueño" name="dueño">
+                            <option value="">Seleccionar dueño...</option>
+                            <c:forEach var="cliente" items="${listaClientes}">
+                                <option value="${cliente.id}" ${param.dueño == cliente.id ? 'selected' : ''}>
+                                    ${cliente.nombre} ${cliente.apellidos}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
+
+                    <!-- Filtro de especie -->
+                    <div class="col-md-4">
+                        <label for="especie" class="form-label">Especie:</label>
+                        <select class="form-select" id="especie" name="especie">
+                            <option value="">Seleccionar especie...</option>
+                            <c:forEach var="especie" items="${listaEspecies}">
+                                <option value="${especie}" ${param.especie == especie ? 'selected' : ''}>${especie}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+
+                    <!-- Filtro de raza -->
+                    <div class="col-md-4">
+                        <label for="raza" class="form-label">Raza:</label>
+                        <select class="form-select" id="raza" name="raza">
+                            <option value="">Seleccionar raza...</option>
+                            <c:forEach var="raza" items="${listaRazas}">
+                                <option value="${raza}" ${param.raza == raza ? 'selected' : ''}>${raza}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Buscar</button>
+                
+                <!-- Botón para limpiar filtros -->
+                <button type="button" class="btn btn-secondary mt-3" onclick="limpiarFiltros()">Limpiar Filtros</button>
+                
+            </form>
+
+
 
             <!-- Botón para añadir nuevo historial -->
             <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modalNuevoHistorial">
@@ -51,12 +115,19 @@
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="mascota" class="form-label">Mascota:</label>
-                                    <select name="idMascota" id="mascota" class="form-select">
-                                        <c:forEach var="mascota" items="${listaMascotas}">
-                                            <option value="${mascota.id}">
-                                                ${mascota.nombre} (${mascota.especie}) - Dueño: ${mascota.propietario.nombre} ${mascota.propietario.apellidos}
-                                            </option>
-                                        </c:forEach>
+                                    <select name="idMascota" id="mascota" class="form-select" ${empty listaMascotas ? 'disabled' : ''}>
+                                        <c:choose>
+                                            <c:when test="${not empty listaMascotas}">
+                                                <c:forEach var="mascota" items="${listaMascotas}">
+                                                    <option value="${mascota.id}">
+                                                        ${mascota.nombre} (${mascota.especie}) - Dueño: ${mascota.propietario.nombre} ${mascota.propietario.apellidos}
+                                                    </option>
+                                                </c:forEach>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <option value="" disabled>No hay mascotas registradas</option>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </select>
                                 </div>
                                 <div class="mb-3">

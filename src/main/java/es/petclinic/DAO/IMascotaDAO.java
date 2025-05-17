@@ -29,6 +29,22 @@ public interface IMascotaDAO extends IGenericoDAO<Mascota> {
      * 
      * @return 
      */
+    public List<String> obtenerEspecies();
+    
+    /**
+     * 
+     * 
+     * 
+     * @return 
+     */
+    public List<String> obtenerRazas();
+    
+    /**
+     * 
+     * 
+     * 
+     * @return 
+     */
     public List<Mascota> getAllMascotas();
     
     /**

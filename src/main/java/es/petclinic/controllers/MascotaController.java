@@ -73,6 +73,16 @@ public class MascotaController extends HttpServlet {
 
         switch (accion) {
             case "crearMascota":
+                
+                // Obtener las listas de especies y razas de la base de datos
+                IMascotaDAO mascotaDAO = new MascotaDAO();
+                List<String> listaEspecies = mascotaDAO.obtenerEspecies();
+                List<String> listaRazas = mascotaDAO.obtenerRazas();
+
+                // Pasar las listas como atributos de la petición
+                request.setAttribute("listaEspecies", listaEspecies);
+                request.setAttribute("listaRazas", listaRazas);
+                
                 url = "JSP/Mascota/crearMascota.jsp";
                 break;
 
@@ -90,6 +100,15 @@ public class MascotaController extends HttpServlet {
                     if (!error.equals("n")) {
                         String aviso = "Todos los campos marcados (*) son obligatorios";
                         request.setAttribute("errorCreate", aviso);
+                        
+                        mascotaDAO = new MascotaDAO();
+                        listaEspecies = mascotaDAO.obtenerEspecies();
+                        listaRazas = mascotaDAO.obtenerRazas();
+
+                        // Pasar las listas como atributos de la petición
+                        request.setAttribute("listaEspecies", listaEspecies);
+                        request.setAttribute("listaRazas", listaRazas);
+                        
                         url = "JSP/Mascota/crearMascota.jsp";
                     } else {
                         try {
@@ -143,7 +162,7 @@ public class MascotaController extends HttpServlet {
                             }
 
                             // Guardar mascota
-                            IMascotaDAO mascotaDAO = new MascotaDAO();
+                            mascotaDAO = new MascotaDAO();
                             mascotaDAO.insertarMascota(mascota);
 
                             // Cargar lista actualizada de mascotas
@@ -172,10 +191,19 @@ public class MascotaController extends HttpServlet {
                 try {
                 int idMascota = Integer.parseInt(request.getParameter("id"));
 
-                IMascotaDAO mascotaDAO = new MascotaDAO();
+                mascotaDAO = new MascotaDAO();
                 Mascota mascota = mascotaDAO.getById(idMascota);
 
                 if (mascota != null) {
+                    
+                    mascotaDAO = new MascotaDAO();
+                    listaEspecies = mascotaDAO.obtenerEspecies();
+                    listaRazas = mascotaDAO.obtenerRazas();
+
+                    // Pasar las listas como atributos de la petición
+                    request.setAttribute("listaEspecies", listaEspecies);
+                    request.setAttribute("listaRazas", listaRazas);
+                    
                     request.setAttribute("mascota", mascota);
                     url = "JSP/Mascota/editarMascota.jsp";
                     break;
@@ -201,8 +229,17 @@ public class MascotaController extends HttpServlet {
 
                     // Cargar la mascota original para que no se pierdan datos
                     int idMascota = Integer.parseInt(request.getParameter("id"));
-                    IMascotaDAO mascotaDAO = new MascotaDAO();
+                    mascotaDAO = new MascotaDAO();
                     Mascota mascota = mascotaDAO.getById(idMascota);
+                    
+                    mascotaDAO = new MascotaDAO();
+                    listaEspecies = mascotaDAO.obtenerEspecies();
+                    listaRazas = mascotaDAO.obtenerRazas();
+
+                    // Pasar las listas como atributos de la petición
+                    request.setAttribute("listaEspecies", listaEspecies);
+                    request.setAttribute("listaRazas", listaRazas);
+                    
                     request.setAttribute("mascota", mascota);
 
                     url = "JSP/Mascota/editarMascota.jsp";
@@ -210,7 +247,7 @@ public class MascotaController extends HttpServlet {
                 }
 
                 int idMascota = Integer.parseInt(request.getParameter("id"));
-                IMascotaDAO mascotaDAO = new MascotaDAO();
+                mascotaDAO = new MascotaDAO();
                 Mascota mascota = mascotaDAO.getById(idMascota);
 
                 if (mascota != null) {
@@ -271,32 +308,32 @@ public class MascotaController extends HttpServlet {
             case "eliminarMascota":
                 
                 try {
-                int idMascota = Integer.parseInt(request.getParameter("id"));
-                IMascotaDAO mascotaDAO = new MascotaDAO();
+                    int idMascota = Integer.parseInt(request.getParameter("id"));
+                    mascotaDAO = new MascotaDAO();
 
-                mascotaDAO.eliminarMascota(idMascota);
+                    mascotaDAO.eliminarMascota(idMascota);
 
-                // Volver a cargar la lista actualizada
-                HttpSession sessionEliminar = request.getSession(false);
-                if (sessionEliminar != null && sessionEliminar.getAttribute("usuario") != null) {
-                    Cliente cliente = (Cliente) sessionEliminar.getAttribute("usuario");
-                    List<Mascota> listaActualizada = mascotaDAO.getMascotasByIdCliente(cliente.getId());
-                    request.setAttribute("listaMascotas", listaActualizada);
+                    // Volver a cargar la lista actualizada
+                    HttpSession sessionEliminar = request.getSession(false);
+                    if (sessionEliminar != null && sessionEliminar.getAttribute("usuario") != null) {
+                        Cliente cliente = (Cliente) sessionEliminar.getAttribute("usuario");
+                        List<Mascota> listaActualizada = mascotaDAO.getMascotasByIdCliente(cliente.getId());
+                        request.setAttribute("listaMascotas", listaActualizada);
+                    }
+
+                    request.setAttribute("eliminada", "Mascota eliminada correctamente.");
+                    url = "JSP/Cliente/mascotas.jsp";
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    request.setAttribute("error", "No se pudo eliminar la mascota.");
+                    url = "JSP/Cliente/mascotas.jsp";
                 }
-
-                request.setAttribute("eliminada", "Mascota eliminada correctamente.");
-                url = "JSP/Cliente/mascotas.jsp";
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                request.setAttribute("error", "No se pudo eliminar la mascota.");
-                url = "JSP/Cliente/mascotas.jsp";
-            }
             break;
 
             case "volver":
-                url = "JSP/Cliente/mascota.jsp";
-                break;
+                url = "JSP/Cliente/mascotas.jsp";
+            break;
         }
 
         request.getRequestDispatcher(url).forward(request, response);

@@ -1,5 +1,6 @@
 package es.petclinic.DAO;
 
+import es.petclinic.beans.HistorialMedico;
 import es.petclinic.beans.Mascota;
 import es.petclinic.persistence.HibernateUtil;
 import java.util.ArrayList;
@@ -73,6 +74,42 @@ public class MascotaDAO extends GenericoDAO<Mascota> implements IMascotaDAO {
     }
     
     @Override
+    public List<String> obtenerEspecies() {
+        List<String> especies = new ArrayList<>();
+        try {
+            startTransaction();
+
+            // HQL para obtener las especies sin duplicados
+            Query<String> query = session.createQuery("SELECT DISTINCT m.especie FROM Mascota m ORDER BY m.especie ASC", String.class);
+
+            especies = query.getResultList();
+
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return especies;
+    }
+
+    @Override
+    public List<String> obtenerRazas() {
+        List<String> razas = new ArrayList<>();
+        try {
+            startTransaction();
+
+            // HQL para obtener las razas sin duplicados
+            Query<String> query = session.createQuery("SELECT DISTINCT m.raza FROM Mascota m ORDER BY m.raza ASC", String.class);
+
+            razas = query.getResultList();
+
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return razas;
+    }
+    
+    @Override
     public List<Mascota> getAllMascotas() {
         List<Mascota> mascotas = null;
 
@@ -115,7 +152,6 @@ public class MascotaDAO extends GenericoDAO<Mascota> implements IMascotaDAO {
         }
     }
 
-
     @Override
     public void eliminarMascota(int id) {
         try {
@@ -125,6 +161,17 @@ public class MascotaDAO extends GenericoDAO<Mascota> implements IMascotaDAO {
             Mascota mascota = session.get(Mascota.class, id);
 
             if (mascota != null) {
+                // Obtener todos los historiales médicos asociados a la mascota
+                Query<HistorialMedico> query = session.createQuery("FROM HistorialMedico h WHERE h.mascota.id = :idMascota", HistorialMedico.class);
+                query.setParameter("idMascota", id);
+                List<HistorialMedico> historiales = query.list();
+
+                // Eliminar todos los historiales médicos de la mascota
+                for (HistorialMedico historial : historiales) {
+                    session.delete(historial);
+                }
+
+                // Eliminar la mascota
                 session.delete(mascota);
             }
 
@@ -133,5 +180,6 @@ public class MascotaDAO extends GenericoDAO<Mascota> implements IMascotaDAO {
             handleException(he);
         }
     }
+
 
 }

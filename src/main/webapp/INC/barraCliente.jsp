@@ -7,127 +7,106 @@
         <title>Panel de Cliente - Pet Clinic</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
         <style>
-
             .navbar-cliente {
                 background-color: #e1f1f7;
+                border-bottom: 1px solid #ccc;
+                position: sticky;
+                top: 0;
+                z-index: 1030;
             }
 
-            .navbar-cliente .navbar-brand {
-                font-size: 1.8rem;
-                font-weight: bold;
-                color: #4a7c68;
-            }
-
-            .navbar-cliente .navbar-brand img {
-                max-width: 30px;
+            .navbar-cliente .nav-item {
                 margin-right: 10px;
             }
 
-            .navbar-cliente .nav-pills .nav-link {
-                border-radius: 0.25rem;
+            .navbar-cliente .nav-link {
+                color: #007bff;
                 font-size: 16px;
                 font-weight: 500;
-                padding: 10px 20px;
-                color: #007bff;
                 transition: background-color 0.3s ease, color 0.3s ease;
-                border: none;
-                background-color: transparent;
             }
 
-            .navbar-cliente .nav-pills .nav-link:hover {
+            .navbar-cliente .nav-link:hover {
                 background-color: #007bff;
                 color: #fff;
-                text-decoration: underline;
+                border-radius: 5px;
             }
 
-            .navbar-cliente .nav-pills .nav-link.active {
-                background-color: #0056b3;
-                color: #fff;
-                border: 2px solid #003d73;
+            @media (max-width: 768px) {
+                .navbar-cliente {
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+                .navbar-cliente .nav-item {
+                    flex: 1 1 100%;
+                    text-align: center;
+                }
             }
-
-            .navbar-cliente .nav-pills {
-                margin-bottom: 20px;
-            }
-
-            .navbar-cliente .card {
-                margin-bottom: 20px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                border-radius: 10px;
-            }
-
-            .navbar-cliente .card-body {
-                padding: 20px;
-            }
-
-            .navbar-cliente .card .btn-block {
-                width: 100%;
-            }
-
-            .navbar-cliente .btn-success {
-                background-color: #4a7c68;
-                border-color: #4a7c68;
-            }
-
-            .navbar-cliente .btn-primary {
-                background-color: #007bff;
-                border-color: #007bff;
-            }
-
-            .navbar-cliente .btn-warning {
-                background-color: #ffcb01;
-                border-color: #ffcb01;
-            }
-
-            .navbar-cliente .btn-info {
-                background-color: #00aaff;
-                border-color: #00aaff;
-            }
-
-
         </style>
+
     </head>
     <body>
 
         <!-- Barra de navegación -->
         <nav class="navbar navbar-expand-lg navbar-light navbar-cliente">
             <div class="container-fluid">
-                <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <form action="ClienteController" method="POST">
+                                <input type="hidden" name="accion" value="homeCliente">
+                                <button type="submit" 
+                                        class="nav-link <c:if test='${pageContext.request.requestURI.contains("cliente")}'>active</c:if>">
+                                    <i class="fas fa-home"></i>
+                                </button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form action="ClienteController" method="POST">
                                 <input type="hidden" name="accion" value="gestionMascotas">
-                                <button type="submit" class="nav-link">Tus Mascotas</button>
+                                <button type="submit" 
+                                        class="nav-link <c:if test='${pageContext.request.requestURI.contains("mascotas")}'>active</c:if>">
+                                    Tus Mascotas</button>
                             </form>
                         </li>
                         <li class="nav-item">
                             <form action="ClienteController" method="POST">
                                 <input type="hidden" name="accion" value="solicitarCita">
-                                <button type="submit" class="nav-link">Cita</button>
+                                <button type="submit" 
+                                        class="nav-link <c:if test='${pageContext.request.requestURI.contains("citas")}'>active</c:if>">
+                                    Citas</button>
                             </form>
                         </li>
                         <li class="nav-item">
                             <form action="ClienteController" method="POST">
                                 <input type="hidden" name="accion" value="historialMedico">
-                                <button type="submit" class="nav-link">Historial médico</button>
+                                <button type="submit" 
+                                        class="nav-link <c:if test='${pageContext.request.requestURI.contains("historialMedico")}'>active</c:if>">
+                                    Historiales médicos</button>
                             </form>
                         </li>
                         <li class="nav-item">
                             <form action="ClienteController" method="POST">
                                 <input type="hidden" name="accion" value="verServicios">
-                                <button type="submit" class="nav-link">Servicios disponibles</button>
+                                <button type="submit" 
+                                        class="nav-link <c:if test='${pageContext.request.requestURI.contains("servicios")}'>active</c:if>">
+                                    Servicios disponibles</button>
                             </form>
                         </li>
                         <li class="nav-item">
                             <form action="ClienteController" method="POST">
                                 <input type="hidden" name="accion" value="verInfografia">
-                                <button type="submit" class="nav-link">Infografías</button>
+                                <button type="submit" 
+                                        class="nav-link <c:if test='${pageContext.request.requestURI.contains("infografia")}'>active</c:if>">
+                                    Infografías</button>
                             </form>
                         </li>
                         <li class="nav-item">
                             <form action="ClienteController" method="POST">
                                 <input type="hidden" name="accion" value="editarPerfil">
-                                <button type="submit" class="nav-link">Editar perfil</button>
+                                <button type="submit" 
+                                        class="nav-link <c:if test='${pageContext.request.requestURI.contains("editarPerfil")}'>active</c:if>">
+                                    Editar perfil</button>
                             </form>
                         </li>
                     </ul>
@@ -135,9 +114,8 @@
             </div>
         </nav>
 
-
-        <!-- Bootstrap 5 JS y Popper.js -->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     </body>
 </html>

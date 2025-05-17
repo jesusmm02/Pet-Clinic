@@ -4,6 +4,16 @@ import es.petclinic.beans.Usuario;
 
 public interface IUsuarioDAO extends IGenericoDAO<Usuario> {
     
+
+    /**
+     * 
+     * 
+     * 
+     * @param idUsuario
+     * @return 
+     */
+    public Usuario getById(int idUsuario);
+    
     /**
      * 
      * Obtiene un objeto Usuario cuyo email sea el pasado por parámetro.

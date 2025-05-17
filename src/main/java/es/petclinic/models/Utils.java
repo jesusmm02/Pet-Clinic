@@ -58,12 +58,12 @@ public class Utils {
     }
 
     /**
-     *
-     * Valida que los campos obligatorios del formulario de login estén completos.
      * 
-     * @param parametros Enumeración de los nombres de parámetros del formulario.
-     * @param request Objeto HttpServletRequest que contiene los parámetros enviados por el usuario.
-     * @return "n" si todos los campos obligatorios están completos, "v" si alguno está vacío.
+     * 
+     * 
+     * @param parametros
+     * @param request
+     * @return 
      */
     public static String comprobarCamposLogin(Enumeration<String> parametros, HttpServletRequest request) {
 
@@ -87,12 +87,12 @@ public class Utils {
     }
 
     /**
-     *
-     * Valida que los campos obligatorios del formulario de registro o edición de un tutor estén completos.
-     *
-     * @param parametros Enumeración de los nombres de parámetros del formulario.
-     * @param request Objeto HttpServletRequest que contiene los parámetros enviados por el usuario.
-     * @return "n" si todos los campos obligatorios están completos, "v" si alguno está vacío.
+     * 
+     * 
+     * 
+     * @param parametros
+     * @param request
+     * @return 
      */
     public static String comprobarCampos(Enumeration<String> parametros, HttpServletRequest request) {
         String error = "n";
@@ -125,12 +125,12 @@ public class Utils {
     
     
     /**
-     *
-     * Valida que los campos obligatorios del formulario de registro o edición de un tutor estén completos.
-     *
-     * @param parametros Enumeración de los nombres de parámetros del formulario.
-     * @param request Objeto HttpServletRequest que contiene los parámetros enviados por el usuario.
-     * @return "n" si todos los campos obligatorios están completos, "v" si alguno está vacío.
+     * 
+     * 
+     * 
+     * @param parametros
+     * @param request
+     * @return 
      */
     public static String comprobarCamposMascota(Enumeration<String> parametros, HttpServletRequest request) {
         String error = "n";
@@ -138,6 +138,34 @@ public class Utils {
         // Lista de campos obligatorios
         String[] camposCriticos = {
             "nombre", "especie", "raza", "peso", "genero"
+        };
+
+        for (String campo : camposCriticos) {
+            String valor = request.getParameter(campo);
+            if (valor == null || valor.trim().isEmpty()) {
+                error = "v"; // Campo vacío
+                break;
+            }
+        }
+
+        return error;
+    }
+    
+    
+    /**
+     * 
+     * 
+     * 
+     * @param parametros
+     * @param request
+     * @return 
+     */
+    public static String comprobarCamposHistorial(Enumeration<String> parametros, HttpServletRequest request) {
+        String error = "n";
+
+        // Lista de campos obligatorios
+        String[] camposCriticos = {
+            "idMascota", "descripcion", "tratamiento"
         };
 
         for (String campo : camposCriticos) {

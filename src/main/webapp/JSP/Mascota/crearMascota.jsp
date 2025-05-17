@@ -13,6 +13,7 @@
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
         <script src="${contexto}/JS/validarAvatarMascota.js" defer></script>
         <script src="${contexto}/JS/vistaAvatarMascota.js" defer></script>
+        <script src="${contexto}/JS/selectMascotas.js" defer></script>
     </head>
     <body>
 
@@ -46,14 +47,28 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="especie" class="form-label">* Especie</label>
-                        <input type="text" class="form-control" id="especie" name="especie">
+                        <select class="form-select" id="selectEspecie" name="especie">
+                            <option value="" disabled selected>Seleccione una especie...</option>
+                            <c:forEach var="especie" items="${listaEspecies}">
+                                <option value="${especie}">${especie}</option>
+                            </c:forEach>
+                            <option value="otra">Otra...</option>
+                        </select>
+                        <input type="text" class="form-control mt-2" id="inputEspecie" name="especie" placeholder="Especie no registrada" style="display: none;">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="raza" class="form-label">* Raza</label>
-                        <input type="text" class="form-control" id="raza" name="raza">
+                        <select class="form-select" id="selectRaza" name="raza">
+                            <option value="" disabled selected>Seleccione una raza...</option>
+                            <c:forEach var="raza" items="${listaRazas}">
+                                <option value="${raza}">${raza}</option>
+                            </c:forEach>
+                            <option value="otra">Otra...</option>
+                        </select>
+                        <input type="text" class="form-control mt-2" id="inputRaza" name="raza" placeholder="Raza no registrada" style="display: none;">
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -83,15 +98,15 @@
                         <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
                         <small class="form-text text-muted">Se permite .png, .jpg o .jpeg</small>
                         <img class="mt-2" id="vistaPreviaFoto">
-                        <p id="avatarError" style="color: red"></p>
+                        <p id="fotoError" style="color: red"></p>
                     </div>
                 </div>
 
                 <div class="mt-4 d-flex justify-content-between">
-                    <form action="ClienteController" method="POST" class="d-inline">
+                    <!--<form action="ClienteController" method="POST" class="d-inline">
                         <input type="hidden" name="accion" value="gestionMascotas">
                         <button type="submit" class="btn btn-secondary">Volver</button>
-                    </form>
+                    </form>-->
                     <button type="submit" id="btnRegistrarMascota" name="accion" value="guardarMascota" class="btn btn-success">Guardar mascota</button>
                 </div>
             </form>

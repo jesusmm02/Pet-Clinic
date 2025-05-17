@@ -1,7 +1,5 @@
 package es.petclinic.controllers;
 
-import es.petclinic.DAO.ClienteDAO;
-import es.petclinic.DAO.IClienteDAO;
 import es.petclinic.DAO.IUsuarioDAO;
 import es.petclinic.DAO.UsuarioDAO;
 
@@ -68,7 +66,6 @@ public class FrontController extends HttpServlet {
                         String password = request.getParameter("password");
 
                         IUsuarioDAO usuarioDAO = new UsuarioDAO();
-                        IClienteDAO clienteDAO = new ClienteDAO();
                         Usuario usuario = usuarioDAO.obtenerPorEmail(email);
 
                         if (usuario != null && Utils.verifyPassword(password, usuario.getPassword())) {
@@ -85,7 +82,6 @@ public class FrontController extends HttpServlet {
                                         // Actualizar fecha de último acceso
                                         usuario.setUltimoAcceso(new Date());
                                         
-                                        request.setAttribute("acceso", "Has iniciado sesión como veterinario.");
                                         url = "JSP/Veterinario/veterinario.jsp";
                                         break;
                                     case CLIENTE:
@@ -93,10 +89,8 @@ public class FrontController extends HttpServlet {
                                         // Actualizar fecha de último acceso
                                         usuario.setUltimoAcceso(new Date());
                                         
-                                        request.setAttribute("acceso", "Has iniciado sesión como cliente.");
                                         url = "JSP/Cliente/cliente.jsp";
                                         break;
-                                        
                                     default:
                                         request.setAttribute("error", "No tienes permisos para acceder.");
                                         url = ".";

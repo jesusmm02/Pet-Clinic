@@ -7,83 +7,41 @@
         <title>Panel de Veterinario - Pet Clinic</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
         <style>
-
             .navbar-veterinario {
                 background-color: #e1f1f7;
+                border-bottom: 1px solid #ccc;
+                position: sticky;
+                top: 0;
+                z-index: 1030;
             }
 
-            .navbar-veterinario .navbar-brand {
-                font-size: 1.8rem;
-                font-weight: bold;
-                color: #4a7c68;
-            }
-
-            .navbar-veterinario .navbar-brand img {
-                max-width: 30px;
+            .navbar-veterinario .nav-item {
                 margin-right: 10px;
             }
 
-            .navbar-veterinario .nav-pills .nav-link {
-                border-radius: 0.25rem;
+            .navbar-veterinario .nav-link {
+                color: #007bff;
                 font-size: 16px;
                 font-weight: 500;
-                padding: 10px 20px;
-                color: #007bff;
                 transition: background-color 0.3s ease, color 0.3s ease;
-                border: none;
-                background-color: transparent;
             }
 
-            .navbar-veterinario .nav-pills .nav-link:hover {
+            .navbar-veterinario .nav-link:hover {
                 background-color: #007bff;
                 color: #fff;
-                text-decoration: underline;
+                border-radius: 5px;
             }
 
-            .navbar-veterinario .nav-pills .nav-link.active {
-                background-color: #0056b3;
-                color: #fff;
-                border: 2px solid #003d73;
+            @media (max-width: 768px) {
+                .navbar-veterinario {
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+                .navbar-veterinario .nav-item {
+                    flex: 1 1 100%;
+                    text-align: center;
+                }
             }
-
-            .navbar-veterinario .nav-pills {
-                margin-bottom: 20px;
-            }
-
-            .navbar-veterinario .card {
-                margin-bottom: 20px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                border-radius: 10px;
-            }
-
-            .navbar-veterinario .card-body {
-                padding: 20px;
-            }
-
-            .navbar-veterinario .card .btn-block {
-                width: 100%;
-            }
-
-            .navbar-veterinario .btn-success {
-                background-color: #4a7c68;
-                border-color: #4a7c68;
-            }
-
-            .navbar-veterinario .btn-primary {
-                background-color: #007bff;
-                border-color: #007bff;
-            }
-
-            .navbar-veterinario .btn-warning {
-                background-color: #ffcb01;
-                border-color: #ffcb01;
-            }
-
-            .navbar-veterinario .btn-info {
-                background-color: #00aaff;
-                border-color: #00aaff;
-            }
-
         </style>
     </head>
     <body>
@@ -91,34 +49,61 @@
         <!-- Barra de navegación -->
         <nav class="navbar navbar-expand-lg navbar-light navbar-veterinario">
             <div class="container-fluid">
-                <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
+
+                        <!-- Botón de Home -->
+                        <li class="nav-item">
+                            <form action="VeterinarioController" method="POST">
+                                <input type="hidden" name="accion" value="homeVeterinario">
+                                <button type="submit" 
+                                        class="nav-link <c:if test='${pageContext.request.requestURI.contains("veterinario.jsp")}'>active</c:if>">
+                                    <i class="fas fa-home"></i>
+                                </button>
+                            </form>
+                        </li>
+
+                        <!-- Ver Clientes -->
                         <li class="nav-item">
                             <form action="VeterinarioController" method="POST">
                                 <input type="hidden" name="accion" value="verClientes">
-                                <button type="submit" class="nav-link">Ver Clientes</button>
+                                <button type="submit" 
+                                        class="nav-link <c:if test='${pageContext.request.requestURI.contains("clientes_mascotas")}'>active</c:if>">
+                                    Ver Clientes
+                                </button>
                             </form>
                         </li>
+
+                        <!-- Historial Médico -->
                         <li class="nav-item">
                             <form action="VeterinarioController" method="POST">
                                 <input type="hidden" name="accion" value="historialMedico">
-                                <button type="submit" class="nav-link">Historiales médicos</button>
+                                <button type="submit" 
+                                        class="nav-link <c:if test='${pageContext.request.requestURI.contains("historialMedico")}'>active</c:if>">
+                                    Historiales médicos
+                                </button>
                             </form>
                         </li>
+
+                        <!-- Ver citas -->
                         <li class="nav-item">
                             <form action="VeterinarioController" method="POST">
                                 <input type="hidden" name="accion" value="citas">
-                                <button type="submit" class="nav-link">Ver citas</button>
+                                <button type="submit" 
+                                        class="nav-link <c:if test='${pageContext.request.requestURI.contains("citas")}'>active</c:if>">
+                                    Ver citas
+                                </button>
                             </form>
                         </li>
+
                     </ul>
                 </div>
             </div>
         </nav>
 
 
-        <!-- Bootstrap 5 JS y Popper.js -->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     </body>
 </html>

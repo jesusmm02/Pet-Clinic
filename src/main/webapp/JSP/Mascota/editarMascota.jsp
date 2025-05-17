@@ -9,34 +9,11 @@
         <title>Editar Mascota - Pet Clinic</title>
         <link rel="stylesheet" href="${bootstrap}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
-        <style>
-            .mensaje-flotanteError {
-                position: fixed;
-                top: 80px;
-                right: 20px;
-                background-color: #f8d7da;
-                color: #721c24;
-                padding: 10px 20px;
-                border: 1px solid #f5c6cb;
-                border-radius: 5px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                z-index: 1050;
-                font-size: 14px;
-                animation: fadeIn 0.5s ease-out;
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(-10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        </style>
+        <script src="${contexto}/JS/validarAvatarMascota.js" defer></script>
+        <script src="${contexto}/JS/vistaFotoEditar.js" defer></script>
+        <script src="${contexto}/JS/selectMascotas.js" defer></script>
     </head>
     <body>
 
@@ -68,16 +45,30 @@
                         <input type="text" class="form-control" id="nombre" name="nombre" value="${mascota.nombre}">
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                     <div class="col-md-6 mb-3">
                         <label for="especie" class="form-label">* Especie</label>
-                        <input type="text" class="form-control" id="especie" name="especie" value="${mascota.especie}">
+                        <select class="form-select" id="selectEspecie" name="especie">
+                            <option value="" disabled>Seleccione una especie...</option>
+                            <c:forEach var="especie" items="${listaEspecies}">
+                                <option value="${especie}" ${mascota.especie == especie ? 'selected' : ''}>${especie}</option>
+                            </c:forEach>
+                            <option value="otra" ${mascota.especie == 'otra' ? 'selected' : ''}>Otra...</option>
+                        </select>
+                        <input type="text" class="form-control mt-2" id="inputEspecie" name="especie" placeholder="Especie no registrada" style="display: none;" value="${mascota.especie != 'otra' ? '' : mascota.especie}">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="raza" class="form-label">* Raza</label>
-                        <input type="text" class="form-control" id="raza" name="raza" value="${mascota.raza}">
+                        <select class="form-select" id="selectRaza" name="raza">
+                            <option value="" disabled>Seleccione una raza...</option>
+                            <c:forEach var="raza" items="${listaRazas}">
+                                <option value="${raza}" ${mascota.raza == raza ? 'selected' : ''}>${raza}</option>
+                            </c:forEach>
+                            <option value="otra" ${mascota.raza == 'otra' ? 'selected' : ''}>Otra...</option>
+                        </select>
+                        <input type="text" class="form-control mt-2" id="inputRaza" name="raza" placeholder="Raza no registrada" style="display: none;" value="${mascota.raza != 'otra' ? '' : mascota.raza}">
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -101,12 +92,32 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="foto" class="form-label">Foto (actual: ${mascota.foto})</label>
-                        <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 mb-3 text-center">
+                        <label for="foto" class="form-label">Foto Actual:</label>
+
+                        <!-- Mostrar la foto actual si existe -->
+                        <c:if test="${not empty mascota.foto}">
+                            <div class="border p-3 rounded bg-light mb-3 d-flex justify-content-center">
+                                <img 
+                                    src="${pageContext.request.contextPath}/IMG/fotosMascotas/${mascota.foto}" 
+                                    alt="Foto de Mascota" 
+                                    id="vistaPreviaFoto" 
+                                    class="img-fluid"
+                                    style="max-width: 150px; max-height: 150px; object-fit: cover; border-radius: 10px;">
+                            </div>
+                        </c:if>
+
+                        <!-- Input para seleccionar una nueva foto -->
+                        <div class="border p-3 rounded bg-light d-flex justify-content-center">
+                            <input type="file" id="foto" name="foto" accept="image/*" class="form-control-file">
+                        </div>
+
+                        <p id="fotoError" style="color: red"></p>
                     </div>
                 </div>
+
+
 
                 <div class="mt-4 d-flex justify-content-between">
                     <button type="submit" class="btn btn-warning text-white">

@@ -10,7 +10,7 @@ import org.hibernate.query.Query;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 public class HistorialMedicoDAO extends GenericoDAO<HistorialMedico> implements IHistorialMedicoDAO {
-    
+
     protected Session session;
     protected Transaction transaction;
 
@@ -35,31 +35,26 @@ public class HistorialMedicoDAO extends GenericoDAO<HistorialMedico> implements 
         }
         throw he;
     }
-    
+
     @Override
     public List<HistorialMedico> getAllHistoriales() {
         List<HistorialMedico> historiales = null;
-        Session session = null;
-        Transaction transaction = null;
 
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            transaction = session.beginTransaction();
+            startTransaction();  // Iniciar la transacción
 
             Query<HistorialMedico> query = session.createQuery("FROM HistorialMedico", HistorialMedico.class);
             historiales = query.list();
 
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
-        } finally {
-            if (session != null) session.close();
+            endTransaction();  // Finalizar la transacción
+        } catch (HibernateException he) {
+            handleException(he);  // Manejar excepciones
         }
 
         return historiales;
     }
-    
+
+
     @Override
     public List<HistorialMedico> getHistorialesByIdMascota(int idMascota) {
         List<HistorialMedico> historiales = null;
@@ -75,7 +70,143 @@ public class HistorialMedicoDAO extends GenericoDAO<HistorialMedico> implements 
         }
         return historiales;
     }
- 
+
+    @Override
+    public List<HistorialMedico> getHistorialesByDueño(int idDueño) {
+        List<HistorialMedico> historiales = null;
+
+        try {
+            startTransaction();
+            Query<HistorialMedico> query = session.createQuery(
+                "FROM HistorialMedico h WHERE h.mascota.propietario.id = :idDueño", 
+                HistorialMedico.class
+            );
+            query.setParameter("idDueño", idDueño);
+            historiales = query.list();
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return historiales;
+    }
+
+
+    @Override
+    public List<HistorialMedico> getHistorialesByEspecie(String especie) {
+        List<HistorialMedico> historiales = null;
+
+        try {
+            startTransaction();
+            Query<HistorialMedico> query = session.createQuery(
+                    "FROM HistorialMedico h WHERE h.mascota.especie = :especie",
+                    HistorialMedico.class
+            );
+            query.setParameter("especie", especie);
+            historiales = query.list();
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return historiales;
+    }
+
+    @Override
+    public List<HistorialMedico> getHistorialesByRaza(String raza) {
+        List<HistorialMedico> historiales = null;
+
+        try {
+            startTransaction();
+            Query<HistorialMedico> query = session.createQuery(
+                    "FROM HistorialMedico h WHERE h.mascota.raza = :raza",
+                    HistorialMedico.class
+            );
+            query.setParameter("raza", raza);
+            historiales = query.list();
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return historiales;
+    }
+    
+    @Override
+    public List<HistorialMedico> getHistorialesByDueñoAndEspecie(int idDueño, String especie) {
+        List<HistorialMedico> historiales = null;
+        try {
+            startTransaction();
+            Query<HistorialMedico> query = session.createQuery(
+                "FROM HistorialMedico h WHERE h.mascota.propietario.id = :idDueño AND h.mascota.especie = :especie", 
+                HistorialMedico.class
+            );
+            query.setParameter("idDueño", idDueño);
+            query.setParameter("especie", especie);
+            historiales = query.list();
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return historiales;
+    }
+    
+    @Override
+    public List<HistorialMedico> getHistorialesByDueñoAndRaza(int idDueño, String raza) {
+        List<HistorialMedico> historiales = null;
+        try {
+            startTransaction();
+            Query<HistorialMedico> query = session.createQuery(
+                "FROM HistorialMedico h WHERE h.mascota.propietario.id = :idDueño AND h.mascota.raza = :raza", 
+                HistorialMedico.class
+            );
+            query.setParameter("idDueño", idDueño);
+            query.setParameter("raza", raza);
+            historiales = query.list();
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return historiales;
+    }
+    
+    @Override
+    public List<HistorialMedico> getHistorialesByEspecieAndRaza(String especie, String raza) {
+        List<HistorialMedico> historiales = null;
+        try {
+            startTransaction();
+            Query<HistorialMedico> query = session.createQuery(
+                "FROM HistorialMedico h WHERE h.mascota.especie = :especie AND h.mascota.raza = :raza", 
+                HistorialMedico.class
+            );
+            query.setParameter("especie", especie);
+            query.setParameter("raza", raza);
+            historiales = query.list();
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return historiales;
+    }
+    
+    @Override
+    public List<HistorialMedico> getHistorialesByDueñoAndEspecieAndRaza(int idDueño, String especie, String raza) {
+        List<HistorialMedico> historiales = null;
+        try {
+            startTransaction();
+            Query<HistorialMedico> query = session.createQuery(
+                "FROM HistorialMedico h WHERE h.mascota.propietario.id = :idDueño AND h.mascota.especie = :especie AND h.mascota.raza = :raza", 
+                HistorialMedico.class
+            );
+            query.setParameter("idDueño", idDueño);
+            query.setParameter("especie", especie);
+            query.setParameter("raza", raza);
+            historiales = query.list();
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return historiales;
+    }
+
+
     @Override
     public void guardarHistorial(HistorialMedico historial) {
         try {
@@ -89,7 +220,7 @@ public class HistorialMedicoDAO extends GenericoDAO<HistorialMedico> implements 
             handleException(he);
         }
     }
-    
+
     @Override
     public void eliminarHistorial(int idHistorial) {
         try {
@@ -107,5 +238,5 @@ public class HistorialMedicoDAO extends GenericoDAO<HistorialMedico> implements 
             handleException(he);
         }
     }
-    
+
 }
