@@ -1,20 +1,34 @@
 package es.petclinic.controllers;
 
+import es.petclinic.DAO.CitaDAO;
 import es.petclinic.DAO.ClienteDAO;
 import es.petclinic.DAO.HistorialMedicoDAO;
+import es.petclinic.DAO.ICitaDAO;
 import es.petclinic.DAO.IClienteDAO;
 import es.petclinic.DAO.IHistorialMedicoDAO;
 import es.petclinic.DAO.IMascotaDAO;
+import es.petclinic.DAO.IServicioDAO;
 import es.petclinic.DAO.MascotaDAO;
+import es.petclinic.DAO.ServicioDAO;
 
+import es.petclinic.beans.Cita;
 import es.petclinic.beans.Cliente;
 import es.petclinic.beans.HistorialMedico;
 import es.petclinic.beans.Mascota;
+import es.petclinic.beans.Servicio;
+import es.petclinic.beans.Usuario;
+
 import es.petclinic.models.Utils;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -61,6 +75,40 @@ public class VeterinarioController extends HttpServlet {
 
         switch (accion) {
             case "homeVeterinario":
+                
+                HttpSession session = request.getSession(false);
+                if (session != null && session.getAttribute("usuario") != null) {
+                    Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+                    // Obtener citas del día para ese veterinario
+                    ICitaDAO citaDAO = new CitaDAO();
+                    List<Cita> citasHoy = citaDAO.getCitasByVeterinarioYFecha(usuario.getId(), LocalDate.now());
+                    List<String> resumenCitasHoy = new ArrayList<>();
+
+                    // Crear resumen de cada cita
+                    for (Cita cita : citasHoy) {
+                        LocalTime horaInicio = cita.getCalendario().getHoraInicio();
+                        int duracion = cita.getServicio().getDuracion();
+                        LocalTime horaFin = horaInicio.plusMinutes(duracion);
+
+                        String nombreMascota = cita.getMascota().getNombre();
+                        String nombreCliente = cita.getMascota().getPropietario().getNombre() + " " + cita.getMascota().getPropietario().getApellidos();
+
+                        String resumen = horaInicio + " - " + horaFin + " – " + nombreMascota + " (con " + nombreCliente + ")";
+                        resumenCitasHoy.add(resumen);
+                    }
+
+                    request.setAttribute("resumenCitasHoy", resumenCitasHoy);
+                }
+                
+                // // Mostrar, de las mascotas que hay registradas en el programa, tres aleatorias
+                IMascotaDAO mascotaDAO = new MascotaDAO();
+                List<Mascota> todasMascotas = mascotaDAO.getAllMascotas();
+                Collections.shuffle(todasMascotas);
+                List<Mascota> mascotasRandom = todasMascotas.subList(0, Math.min(3, todasMascotas.size()));
+                request.setAttribute("mascotasRandom", mascotasRandom);
+                
+                request.setAttribute("hoy", new Date());
 
                 url = "JSP/Veterinario/veterinario.jsp";
 
@@ -69,13 +117,12 @@ public class VeterinarioController extends HttpServlet {
                 HttpSession sessionMascotas = request.getSession(false);
                 if (sessionMascotas != null && sessionMascotas.getAttribute("usuario") != null) {
 
-                    // DAO para clientes y sus mascotas
                     IClienteDAO clienteDAO = new ClienteDAO();
 
-                    // Obtenemos todos los clientes con sus mascotas en una única consulta
+                    // Obtenemos todos los clientes con sus mascotas
                     List<Cliente> listaClientes = clienteDAO.obtenerClientesConMascotas();
 
-                    // Pasamos la lista directamente a la vista
+                    // Pasamos la lista a la vista
                     request.setAttribute("listaClientes", listaClientes);
                     url = "JSP/Veterinario/clientes_mascotas.jsp";
                 } else {
@@ -84,7 +131,7 @@ public class VeterinarioController extends HttpServlet {
                 break;
             case "historialMedico":
                 IHistorialMedicoDAO historialDAO = new HistorialMedicoDAO();
-                IMascotaDAO mascotaDAO = new MascotaDAO();
+                mascotaDAO = new MascotaDAO();
 
                 List<HistorialMedico> listaHistoriales = historialDAO.getAllHistoriales();
                 List<Mascota> listaMascotas = mascotaDAO.getAllMascotas();
@@ -141,7 +188,7 @@ public class VeterinarioController extends HttpServlet {
                     listaHistoriales = historialDAO.getAllHistoriales();
                 }
 
-                // Obtener la lista de clientes, especies y razas
+                // Obtener la lista de todas las mascotas
                 mascotaDAO = new MascotaDAO();
                 listaMascotas = mascotaDAO.getAllMascotas();
 
@@ -149,7 +196,7 @@ public class VeterinarioController extends HttpServlet {
                 clienteDAO = new ClienteDAO();
                 listaClientes = clienteDAO.obtenerClientesConMascotas();
 
-                // Obtener listas únicas de especies y razas
+                // Obtener listas de especies y razas existentes
                 listaEspecies = mascotaDAO.obtenerEspecies();
                 listaRazas = mascotaDAO.obtenerRazas();
 
@@ -165,135 +212,135 @@ public class VeterinarioController extends HttpServlet {
 
             case "guardarHistorial":
                 try {
-                // Validar los campos usando el método de Utils
-                String error = Utils.comprobarCamposHistorial(request.getParameterNames(), request);
+                    String error = Utils.comprobarCamposHistorial(request.getParameterNames(), request);
 
-                // Si hay un error (campo vacío), redirigimos y mostramos el mensaje
-                if ("v".equals(error)) {
-                    request.setAttribute("errorHistorial", "Todos los campos son obligatorios.");
+                    // Si hay un error (campo vacío), redirigimos y mostramos el mensaje
+                    if ("v".equals(error)) {
+                        request.setAttribute("errorHistorial", "Todos los campos son obligatorios.");
 
-                    // Recargar la lista de mascotas para el modal
-                    historialDAO = new HistorialMedicoDAO();
+                        // Recargar la lista de mascotas para el modal
+                        historialDAO = new HistorialMedicoDAO();
+                        mascotaDAO = new MascotaDAO();
+                        listaHistoriales = historialDAO.getAllHistoriales();
+                        listaMascotas = mascotaDAO.getAllMascotas();
+
+                        // Validar si hay mascotas
+                        if (listaMascotas == null || listaMascotas.isEmpty()) {
+                            request.setAttribute("errorHistorial", "No hay mascotas registradas en el sistema.");
+                        }
+
+                        // Recoger los valores de los filtros seleccionados
+                        idDueño = request.getParameter("dueño");
+                        especie = request.getParameter("especie");
+                        raza = request.getParameter("raza");
+
+                        // Obtener la lista de clientes con mascotas
+                        clienteDAO = new ClienteDAO();
+                        listaClientes = clienteDAO.obtenerClientesConMascotas();
+
+                        // Obtener las especies y razas disponibles
+                        listaEspecies = mascotaDAO.obtenerEspecies();
+                        listaRazas = mascotaDAO.obtenerRazas();
+
+                        request.setAttribute("listaHistoriales", listaHistoriales);
+                        request.setAttribute("listaMascotas", listaMascotas);
+                        request.setAttribute("listaClientes", listaClientes);
+                        request.setAttribute("listaEspecies", listaEspecies);
+                        request.setAttribute("listaRazas", listaRazas);
+
+                        // Pasar los filtros actuales
+                        request.setAttribute("filtroDueño", idDueño);
+                        request.setAttribute("filtroEspecie", especie);
+                        request.setAttribute("filtroRaza", raza);
+
+                        // Redirigir a la vista
+                        request.getRequestDispatcher("JSP/Veterinario/historialMedico.jsp").forward(request, response);
+                        return;
+                    }
+
+                    HistorialMedico historial = new HistorialMedico();
+
+                    // Poblar el bean con los datos del formulario
+                    BeanUtils.populate(historial, request.getParameterMap());
+
+                    // Obtener la mascota seleccionada
+                    int idMascota = Integer.parseInt(request.getParameter("idMascota"));
                     mascotaDAO = new MascotaDAO();
+                    Mascota mascota = mascotaDAO.getById(idMascota);
+
+                    // Asignar la mascota al historial
+                    historial.setMascota(mascota);
+
+                    // Asignar al historial la fecha actual
+                    historial.setFecha(new java.util.Date());
+
+                    // Guardar en la base de datos
+                    historialDAO = new HistorialMedicoDAO();
+                    historialDAO.guardarHistorial(historial);
+
+                    // Volver a cargar las listas para que se vean al recargar la página
                     listaHistoriales = historialDAO.getAllHistoriales();
                     listaMascotas = mascotaDAO.getAllMascotas();
 
-                    // Validar si hay mascotas
-                    if (listaMascotas == null || listaMascotas.isEmpty()) {
-                        request.setAttribute("errorHistorial", "No hay mascotas registradas en el sistema.");
-                    }
-                    
-                    // Recoger los valores de los filtros seleccionados
+                    // Obtener los filtros actuales
                     idDueño = request.getParameter("dueño");
                     especie = request.getParameter("especie");
                     raza = request.getParameter("raza");
 
-                    // Obtener la lista de clientes con mascotas
+                    // Filtrar los historiales según los filtros seleccionados
+                    if (idDueño != null && !idDueño.isEmpty() && especie != null && !especie.isEmpty() && raza != null && !raza.isEmpty()) {
+                        listaHistoriales = historialDAO.getHistorialesByDueñoAndEspecieAndRaza(Integer.parseInt(idDueño), especie, raza);
+                    } else if (idDueño != null && !idDueño.isEmpty() && especie != null && !especie.isEmpty()) {
+                        listaHistoriales = historialDAO.getHistorialesByDueñoAndEspecie(Integer.parseInt(idDueño), especie);
+                    } else if (idDueño != null && !idDueño.isEmpty() && raza != null && !raza.isEmpty()) {
+                        listaHistoriales = historialDAO.getHistorialesByDueñoAndRaza(Integer.parseInt(idDueño), raza);
+                    } else if (especie != null && !especie.isEmpty() && raza != null && !raza.isEmpty()) {
+                        listaHistoriales = historialDAO.getHistorialesByEspecieAndRaza(especie, raza);
+                    } else if (idDueño != null && !idDueño.isEmpty()) {
+                        listaHistoriales = historialDAO.getHistorialesByDueño(Integer.parseInt(idDueño));
+                    } else if (especie != null && !especie.isEmpty()) {
+                        listaHistoriales = historialDAO.getHistorialesByEspecie(especie);
+                    } else if (raza != null && !raza.isEmpty()) {
+                        listaHistoriales = historialDAO.getHistorialesByRaza(raza);
+                    } else {
+                        listaHistoriales = historialDAO.getAllHistoriales();
+                    }
+
+                    // Obtener la lista de clientes, especies y razas
                     clienteDAO = new ClienteDAO();
                     listaClientes = clienteDAO.obtenerClientesConMascotas();
-
-                    // Obtener las especies y razas disponibles
                     listaEspecies = mascotaDAO.obtenerEspecies();
                     listaRazas = mascotaDAO.obtenerRazas();
 
+                    // Asignar al request para la vista
                     request.setAttribute("listaHistoriales", listaHistoriales);
                     request.setAttribute("listaMascotas", listaMascotas);
                     request.setAttribute("listaClientes", listaClientes);
                     request.setAttribute("listaEspecies", listaEspecies);
                     request.setAttribute("listaRazas", listaRazas);
 
-                    // Pasar los filtros actuales
+                    // Pasar los valores de los filtros actuales
                     request.setAttribute("filtroDueño", idDueño);
                     request.setAttribute("filtroEspecie", especie);
                     request.setAttribute("filtroRaza", raza);
 
-                    // Redirigir al JSP
-                    request.getRequestDispatcher("JSP/Veterinario/historialMedico.jsp").forward(request, response);
-                    return;
+                    request.setAttribute("creacionHistorial", "Se ha añadido el historial médico correctamente");
+
+                    // Redirigir a página de historiales
+                    url = "JSP/Veterinario/historialMedico.jsp";
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                // Crear instancia del HistorialMedico
-                HistorialMedico historial = new HistorialMedico();
-
-                // Poblar el bean con los datos del formulario
-                BeanUtils.populate(historial, request.getParameterMap());
-
-                // Obtener la mascota seleccionada
-                int idMascota = Integer.parseInt(request.getParameter("idMascota"));
-                mascotaDAO = new MascotaDAO();
-                Mascota mascota = mascotaDAO.getById(idMascota);
-
-                // Asignar la mascota al historial
-                historial.setMascota(mascota);
-
-                // Asignar al hitorial la fecha actual
-                historial.setFecha(new java.util.Date());
-
-                // Guardar en la base de datos
-                historialDAO = new HistorialMedicoDAO();
-                historialDAO.guardarHistorial(historial);
-
-                // Volver a cargar la lista para que se vea al recargar la página
-                listaHistoriales = historialDAO.getAllHistoriales();
-                listaMascotas = mascotaDAO.getAllMascotas();
-                
-                // Obtener los filtros actuales
-                idDueño = request.getParameter("dueño");
-                especie = request.getParameter("especie");
-                raza = request.getParameter("raza");
-
-                // Filtrar los historiales según los filtros seleccionados
-                if (idDueño != null && !idDueño.isEmpty() && especie != null && !especie.isEmpty() && raza != null && !raza.isEmpty()) {
-                    listaHistoriales = historialDAO.getHistorialesByDueñoAndEspecieAndRaza(Integer.parseInt(idDueño), especie, raza);
-                } else if (idDueño != null && !idDueño.isEmpty() && especie != null && !especie.isEmpty()) {
-                    listaHistoriales = historialDAO.getHistorialesByDueñoAndEspecie(Integer.parseInt(idDueño), especie);
-                } else if (idDueño != null && !idDueño.isEmpty() && raza != null && !raza.isEmpty()) {
-                    listaHistoriales = historialDAO.getHistorialesByDueñoAndRaza(Integer.parseInt(idDueño), raza);
-                } else if (especie != null && !especie.isEmpty() && raza != null && !raza.isEmpty()) {
-                    listaHistoriales = historialDAO.getHistorialesByEspecieAndRaza(especie, raza);
-                } else if (idDueño != null && !idDueño.isEmpty()) {
-                    listaHistoriales = historialDAO.getHistorialesByDueño(Integer.parseInt(idDueño));
-                } else if (especie != null && !especie.isEmpty()) {
-                    listaHistoriales = historialDAO.getHistorialesByEspecie(especie);
-                } else if (raza != null && !raza.isEmpty()) {
-                    listaHistoriales = historialDAO.getHistorialesByRaza(raza);
-                } else {
-                    listaHistoriales = historialDAO.getAllHistoriales();
-                }
-
-                // Obtener la lista de clientes, especies y razas
-                clienteDAO = new ClienteDAO();
-                listaClientes = clienteDAO.obtenerClientesConMascotas();
-                listaEspecies = mascotaDAO.obtenerEspecies();
-                listaRazas = mascotaDAO.obtenerRazas();
-
-                // Asignar al request para la vista
-                request.setAttribute("listaHistoriales", listaHistoriales);
-                request.setAttribute("listaMascotas", listaMascotas);
-                request.setAttribute("listaClientes", listaClientes);
-                request.setAttribute("listaEspecies", listaEspecies);
-                request.setAttribute("listaRazas", listaRazas);
-                
-                // Pasar los valores de los filtros actuales
-                request.setAttribute("filtroDueño", idDueño);
-                request.setAttribute("filtroEspecie", especie);
-                request.setAttribute("filtroRaza", raza);
-
-                request.setAttribute("creacionHistorial", "Se ha añadido el historial médico correctamente");
-
-                // Redirigir a página de historiales
-                url = "JSP/Veterinario/historialMedico.jsp";
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            break;
+                break;
             case "eliminarHistorial":
                 try {
                     int idHistorial = Integer.parseInt(request.getParameter("idHistorial"));
                     historialDAO = new HistorialMedicoDAO();
                     historialDAO.eliminarHistorial(idHistorial);
 
+                    
+                    // PASAR FILTROS PARA QUE NO SE PIERDAN AL RECARGAR LA PÁGINA UNA VEZ ELIMINEMOS UN HISTORIAL 
                     // Obtener los filtros actuales
                     idDueño = request.getParameter("dueño");
                     especie = request.getParameter("especie");
@@ -350,7 +397,18 @@ public class VeterinarioController extends HttpServlet {
                 break;
 
             case "citas":
-                url = "JSP/Veterinario/verCitas.jsp";
+                
+                mascotaDAO = new MascotaDAO();
+                listaMascotas = mascotaDAO.getAllMascotas();
+                
+                IServicioDAO servicioDAO = new ServicioDAO();
+                List<Servicio> listaServicios = servicioDAO.obtenerServicios();
+
+                // Pasar mascota y servicios a la vista de las citas del veterinario
+                request.setAttribute("listaMascotas", listaMascotas);
+                request.setAttribute("listaServicios", listaServicios);
+                
+                url = "JSP/Veterinario/citasProgramadas.jsp";
                 break;
         }
 

@@ -7,6 +7,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="/INC/metas.inc"/>
         <title>Servicios Disponibles - Pet Clinic</title>
+        <link rel="icon" href="${contexto}/IMG/logoPetClinic_min.png" type="image/x-icon" />
         <link rel="stylesheet" href="${bootstrap}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
@@ -81,7 +82,9 @@
                                     </li>
                                     <li class="list-group-item"><strong>Duración:</strong> ${servicio.duracion} minutos</li>
                                 </ul>
-                                <button class="btn btn-primary">Reservar</button>
+                                <form action="CitaController" method="POST">
+                                    <button class="btn btn-primary" name="accion" value="solicitarCita">Reservar</button>
+                                </form>
                             </div>
                         </div>
                     </c:forEach>

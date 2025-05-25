@@ -1,14 +1,21 @@
 package es.petclinic.controllers;
 
-import es.petclinic.DAO.ClienteDAO;
-import es.petclinic.DAO.IClienteDAO;
+import com.google.gson.Gson;
+
+import es.petclinic.DAO.CitaDAO;
+import es.petclinic.DAO.ICitaDAO;
 import es.petclinic.DAO.IUsuarioDAO;
 import es.petclinic.DAO.UsuarioDAO;
 
-import es.petclinic.beans.Cliente;
+import es.petclinic.beans.Cita;
 import es.petclinic.beans.Usuario;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,8 +57,9 @@ public class AJAXController extends HttpServlet {
             throws ServletException, IOException {
 
         String accion = request.getParameter("accion");
-        
+
         IUsuarioDAO usuarioDAO = new UsuarioDAO();
+        ICitaDAO citaDAO = new CitaDAO();
 
         if (accion != null) {
 
@@ -71,7 +79,7 @@ public class AJAXController extends HttpServlet {
                         response.getWriter().write("no_existe");  // El email no está registrado
                     }
                     break;
-                    
+
                 case "comprobarIdentificacion":
                     String numIdentificacion = request.getParameter("numIdentificacion");
 
@@ -79,13 +87,72 @@ public class AJAXController extends HttpServlet {
                     usuarioDAO = new UsuarioDAO();
                     usuarioExistente = usuarioDAO.obtenerPorNumIdentificacion(numIdentificacion);
 
-                    // Responder con "existe" si el número ya está registrado, "disponible" si no
                     response.setContentType("text/plain");
                     if (usuarioExistente != null) {
-                        response.getWriter().write("existe");
+                        response.getWriter().write("existe"); // El número ya está registrado
                     } else {
-                        response.getWriter().write("disponible");
+                        response.getWriter().write("disponible"); // El número está disponible
                     }
+                    break;
+
+                // Obtener citas filtradas por animal y/o servicio, para pintar en el calendario  
+                case "obtenerCitasCalendario":
+                    
+                    String animalIdStr = request.getParameter("animalId");
+                    String servicioIdStr = request.getParameter("servicioId");
+
+                    // Convertir los parámetros a Integer si no están vacíos
+                    Integer animalId = (animalIdStr != null && !animalIdStr.isEmpty()) ? Integer.parseInt(animalIdStr) : null;
+                    Integer servicioId = (servicioIdStr != null && !servicioIdStr.isEmpty()) ? Integer.parseInt(servicioIdStr) : null;
+
+                    // Obtener las listas en función de los filtros
+                    List<Cita> citas;
+                    if (animalId != null && servicioId != null) {
+                        citas = citaDAO.getCitasByMascotaAndServicio(animalId, servicioId);
+                    } else if (animalId != null) {
+                        citas = citaDAO.getCitasByMascota(animalId);
+                    } else if (servicioId != null) {
+                        citas = citaDAO.getCitasByServicio(servicioId);
+                    } else {
+                        citas = citaDAO.getAllCitas();
+                    }
+
+                    // Formatear las citas en objetos compatibles con calendarios JS
+                    List<Map<String, Object>> eventos = new ArrayList<>();
+                    for (Cita cita : citas) {
+                        Map<String, Object> evento = new HashMap<>();
+                        evento.put("id", cita.getId());
+                        evento.put("title", cita.getServicio().getNombre());
+                        evento.put("start", cita.getCalendario().getFecha() + "T" + cita.getCalendario().getHoraInicio());
+                        eventos.add(evento);
+                    }
+
+                    response.setContentType("application/json");
+                    response.getWriter().write(new Gson().toJson(eventos));
+                    break;
+
+                // Obtener detalles completos de una cita concreta
+                case "obtenerDetalleCita":
+                    int idCita = Integer.parseInt(request.getParameter("idCita"));
+                    Cita cita = citaDAO.getCitaById(idCita); // Obtener los detalles de la cita
+
+                    // Armar los detalles de la cita
+                    Map<String, Object> detalles = new HashMap<>();
+                    detalles.put("mascota", cita.getMascota().getNombre());
+                    detalles.put("servicio", cita.getServicio().getNombre());
+                    detalles.put("veterinario", cita.getVeterinario().getNombre() + " " + cita.getVeterinario().getApellidos());
+                    detalles.put("fecha", cita.getCalendario().getFecha().toString());
+                    
+                    // Calcular la hora de fin sumando duración a la hora de inicio
+                    LocalTime horaInicio = cita.getCalendario().getHoraInicio();
+                    int duracion = cita.getServicio().getDuracion(); // duración total en minutos
+                    LocalTime horaFinCita = horaInicio.plusMinutes(duracion);
+
+                    detalles.put("horaInicio", horaInicio.toString());
+                    detalles.put("horaFin", horaFinCita.toString());
+
+                    response.setContentType("application/json");
+                    response.getWriter().write(new Gson().toJson(detalles));
                     break;
             }
 

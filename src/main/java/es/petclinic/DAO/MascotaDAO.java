@@ -1,10 +1,15 @@
 package es.petclinic.DAO;
 
+import es.petclinic.beans.Calendario;
+import es.petclinic.beans.Cita;
 import es.petclinic.beans.HistorialMedico;
 import es.petclinic.beans.Mascota;
+
 import es.petclinic.persistence.HibernateUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -161,14 +166,30 @@ public class MascotaDAO extends GenericoDAO<Mascota> implements IMascotaDAO {
             Mascota mascota = session.get(Mascota.class, id);
 
             if (mascota != null) {
+                
                 // Obtener todos los historiales médicos asociados a la mascota
-                Query<HistorialMedico> query = session.createQuery("FROM HistorialMedico h WHERE h.mascota.id = :idMascota", HistorialMedico.class);
-                query.setParameter("idMascota", id);
-                List<HistorialMedico> historiales = query.list();
+                Query<HistorialMedico> queryHistoriales = session.createQuery("FROM HistorialMedico h WHERE h.mascota.id = :idMascota", HistorialMedico.class);
+                queryHistoriales.setParameter("idMascota", id);
+                List<HistorialMedico> historiales = queryHistoriales.list();
 
                 // Eliminar todos los historiales médicos de la mascota
                 for (HistorialMedico historial : historiales) {
                     session.delete(historial);
+                }
+                
+                // Obtener citas asociadas a la mascota
+                Query<Cita> queryCitas = session.createQuery("FROM Cita c WHERE c.mascota.id = :idMascota", Cita.class);
+                queryCitas.setParameter("idMascota", id);
+                List<Cita> citas = queryCitas.list();
+                
+                // Para cada cita, liberar el calendario y eliminar la cita
+                for (Cita cita : citas) {
+                    Calendario calendario = cita.getCalendario();
+                    if (calendario != null) {
+                        calendario.setDisponible(true);
+                        session.update(calendario);
+                    }
+                    session.delete(cita);
                 }
 
                 // Eliminar la mascota

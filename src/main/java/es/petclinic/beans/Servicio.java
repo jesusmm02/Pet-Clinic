@@ -8,26 +8,38 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * 
+ * Entidad Servicio:
+ * Representa un servicio veterinario que se puede ofrecer a las mascotas.
+ * 
+ * @author Jesús
+ */
 @Entity
 @Table(name = "servicios")
 public class Servicio implements Serializable {
     
+    // Clave primaria
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdServicio")
     private Integer id;
 
+    // Nombre del servicio.
     @Column(name = "Nombre", length = 50, nullable = false)
     private String nombre;
 
+    // Descripción del servicio.
     @Column(name = "Descripcion", length = 255)
     private String descripcion;
 
+    // Precio del servicio.
     @Column(name = "Precio", precision = 5, scale = 2, nullable = false)
     private Double precio;
 
+    // Duración del servicio.
     @Column(name = "Duracion", nullable = false)
-    private Integer duracion; // minutos
+    private Integer duracion; // en minutos
     
     
     

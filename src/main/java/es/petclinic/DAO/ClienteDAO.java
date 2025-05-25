@@ -82,24 +82,6 @@ public class ClienteDAO extends GenericoDAO<Cliente> implements IClienteDAO {
     }
 
     @Override
-    public Cliente getByDNI(String dni) {
-        Cliente cliente = null;
-        try {
-            this.startTransaction();
-
-            // Consulta para buscar al cliente por el DNI
-            Query<Cliente> query = session.createQuery("FROM Cliente c WHERE c.dni = :dni", Cliente.class);
-            query.setParameter("dni", dni);
-            cliente = query.uniqueResult(); // Obtiene un único cliente, o null si no existe
-
-            this.endTransaction();
-        } catch (HibernateException he) {
-            handleException(he);
-        }
-        return cliente;
-    }
-
-    @Override
     public List<Cliente> obtenerClientesConMascotas() {
         List<Cliente> listaClientes = null;
         try {

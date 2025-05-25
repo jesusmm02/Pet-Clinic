@@ -71,7 +71,7 @@
                         </li>
                         <li class="nav-item">
                             <form action="ClienteController" method="POST">
-                                <input type="hidden" name="accion" value="solicitarCita">
+                                <input type="hidden" name="accion" value="citas">
                                 <button type="submit" 
                                         class="nav-link <c:if test='${pageContext.request.requestURI.contains("citas")}'>active</c:if>">
                                     Citas</button>

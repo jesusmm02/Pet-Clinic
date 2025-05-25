@@ -7,35 +7,26 @@ public interface IClienteDAO extends IGenericoDAO<Cliente> {
     
     /**
      * 
-     * Inserta un cliente en la BBDD
+     * Inserta un cliente en la base de datos.
      * 
-     * @param cliente Objeto cliente que se inserta en la BBDD
+     * @param cliente Objeto cliente que se inserta en la base de datos.
      */
     public void insertOrUpdateCliente(Cliente cliente);
     
     /**
      * 
-     * Obtiene un cliente por el idUsuario
+     * Obtiene un cliente por el idUsuario.
      * 
-     * @param idUsuario IdUsuario del cliente que se quiere buscar
-     * @return Objeto Cliente que tiene el IdUsuario pasado por parámetro
+     * @param idUsuario IdUsuario del cliente que se quiere buscar.
+     * @return Objeto Cliente que tiene el IdUsuario pasado por parámetro.
      */
     public Cliente getByIdUsuario(int idUsuario);
     
     /**
      * 
-     * Obtiene un cliente por DNI
+     * Recupera una lista de clientes junto con sus mascotas asociadas.
      * 
-     * @param dni DNI del cliente que se quiere buscar
-     * @return Objeto cliente que tiene el DNI pasado por parámetro
-     */
-    public Cliente getByDNI(String dni);
-    
-    /**
-     * 
-     * 
-     * 
-     * @return 
+     * @return Lista de objetos Cliente con sus listas de mascotas.
      */
     public List<Cliente> obtenerClientesConMascotas();
     

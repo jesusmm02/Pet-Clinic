@@ -1,3 +1,14 @@
+/**
+ * 
+ * Script de validación de número de identificación (DNI/NIE) en un formulario de registro.
+ * 
+ * Este script realiza:
+ * - Validación local del formato del DNI o NIE según el tipo seleccionado.
+ * - Validación remota (AJAX) para comprobar si el número ya está registrado.
+ * - Muestra mensajes flotantes en caso de formato incorrecto.
+ * - Deshabilita/habilita el botón de registro según la validez del dato introducido.
+ * 
+ */
 $(document).ready(function () {
     const numIdentificacion = $('#identificacionInput');
     const tipoIdentificacion = $('#tipoIdentificacion');

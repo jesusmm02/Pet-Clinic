@@ -59,11 +59,11 @@ public class Utils {
 
     /**
      * 
+     * Valida los campos del formulario de inicio de sesión no estén vacíos.
      * 
-     * 
-     * @param parametros
-     * @param request
-     * @return 
+     * @param parametros Enumeración de los nombres de parámetros enviados.
+     * @param request Objeto HttpServletRequest desde el cual se obtienen los parámetros del formulario.
+     * @return "n" si no hay errores, "v" si falta algún campo obligatorio.
      */
     public static String comprobarCamposLogin(Enumeration<String> parametros, HttpServletRequest request) {
 
@@ -88,11 +88,11 @@ public class Utils {
 
     /**
      * 
+     * Valida que los campos del formulario de registro estén completos y que las contraseñas coincidan.
      * 
-     * 
-     * @param parametros
-     * @param request
-     * @return 
+     * @param parametros Enumeración de los nombre de parámetros enviados.
+     * @param request Objeto HttpServletRequest desde el cual se obtienen los parámetros del formulario.
+     * @return "n" si todo es correcto, "v" si hay algún campo vacío, "c" si las contraseñas no coinciden.
      */
     public static String comprobarCampos(Enumeration<String> parametros, HttpServletRequest request) {
         String error = "n";
@@ -126,11 +126,11 @@ public class Utils {
     
     /**
      * 
+     * Valida los campos obligatorios del formulario de registro o edición de mascotas estén completos.
      * 
-     * 
-     * @param parametros
-     * @param request
-     * @return 
+     * @param parametros Enumeración de los nombres de parámetros enviados.
+     * @param request Objeto HttpServletRequest desde el cual se obtienen los parámetros del formulario.
+     * @return "n" si no hay errores, "v" si falta algún campo obligatorio.
      */
     public static String comprobarCamposMascota(Enumeration<String> parametros, HttpServletRequest request) {
         String error = "n";
@@ -154,11 +154,11 @@ public class Utils {
     
     /**
      * 
+     * Valida que los campos del formulario de registro de historial médico estén completos.
      * 
-     * 
-     * @param parametros
-     * @param request
-     * @return 
+     * @param parametros Enumeración de los nombres de parámetros enviados.
+     * @param request Objeto HttpServletRequest desde el cual se obtienen los parámetros del formulario.
+     * @return "n" si no hay errores, "v" si falta algún campo obligatorio.
      */
     public static String comprobarCamposHistorial(Enumeration<String> parametros, HttpServletRequest request) {
         String error = "n";

@@ -7,12 +7,14 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="/INC/metas.inc"/>
         <title>Editar Mascota - Pet Clinic</title>
+        <link rel="icon" href="${contexto}/IMG/logoPetClinic_min.png" type="image/x-icon" />
         <link rel="stylesheet" href="${bootstrap}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
         <script src="${contexto}/JS/validarAvatarMascota.js" defer></script>
         <script src="${contexto}/JS/vistaFotoEditar.js" defer></script>
+        <script src="${contexto}/JS/quitarFotoEditar.js" defer></script>
         <script src="${contexto}/JS/selectMascotas.js" defer></script>
     </head>
     <body>
@@ -111,6 +113,11 @@
                         <!-- Input para seleccionar una nueva foto -->
                         <div class="border p-3 rounded bg-light d-flex justify-content-center">
                             <input type="file" id="foto" name="foto" accept="image/*" class="form-control-file">
+                        </div>
+                        
+                        <div class="mt-2 text-center">
+                            <input type="hidden" name="quitarFoto" id="quitarFotoMascota" value="false">
+                            <button type="button" id="btnQuitarFoto" class="btn btn-sm btn-outline-danger" style="display:none;">Quitar foto</button>
                         </div>
 
                         <p id="fotoError" style="color: red"></p>

@@ -8,6 +8,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="/INC/metas.inc"/>
         <title>Historial Médico - Pet Clinic</title>
+        <link rel="icon" href="${contexto}/IMG/logoPetClinic_min.png" type="image/x-icon" />
         <link rel="stylesheet" href="${bootstrap}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
@@ -98,9 +99,24 @@
 
 
             <!-- Botón para añadir nuevo historial -->
-            <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modalNuevoHistorial">
-                <i class="fas fa-plus-circle"></i> Añadir Historial Médico
-            </button>
+            <c:choose>
+                <c:when test="${not empty listaMascotas}">
+                    <!-- Botón habilitado si hay mascotas -->
+                    <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modalNuevoHistorial">
+                        <i class="fas fa-plus-circle"></i> Añadir Historial Médico
+                    </button>
+                </c:when>
+                <c:otherwise>
+                    <!-- Botón deshabilitado con aviso -->
+                    <button type="button" class="btn btn-success mb-3" disabled>
+                        <i class="fas fa-plus-circle"></i> Añadir Historial Médico
+                    </button>
+                    <div class="alert alert-warning mt-2">
+                        <i class="fas fa-exclamation-triangle"></i> No se puede añadir un historial porque no hay mascotas registradas.
+                    </div>
+                </c:otherwise>
+            </c:choose>
+
 
             <!-- Modal para añadir historial -->
             <div class="modal fade" id="modalNuevoHistorial" tabindex="-1">

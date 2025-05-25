@@ -1,9 +1,25 @@
+/**
+ * 
+ * Vista previa avanzada de imagen de mascota (creación dinámica del <img>).
+ *
+ * Este script:
+ * - Detecta si no existe la imagen de vista previa, y la crea.
+ * - Estiliza la imagen con bordes redondeados y centrado.
+ * - Asegura compatibilidad con layouts que usan `.border.d-flex` como contenedor.
+ * 
+ */
 document.getElementById('foto').addEventListener('change', function(event) {
     var archivo = event.target.files[0];
 
     if (archivo) {
         var reader = new FileReader();
 
+        /**
+         * 
+         * Al leer el archivo, actualiza o crea la vista previa <img>.
+         * 
+         * @param {type} e
+         */
         reader.onload = function(e) {
             var imagenVistaPrevia = document.getElementById('vistaPreviaFoto');
 

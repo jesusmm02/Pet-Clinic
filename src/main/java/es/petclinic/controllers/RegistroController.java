@@ -5,8 +5,8 @@ import es.petclinic.DAO.IClienteDAO;
 
 import es.petclinic.beans.Cliente;
 import es.petclinic.beans.Usuario;
-import es.petclinic.models.EnumConverter;
 
+import es.petclinic.models.EnumConverter;
 import es.petclinic.models.Utils;
 
 import java.io.File;
@@ -80,7 +80,7 @@ public class RegistroController extends HttpServlet {
 
             String url = ".";
 
-            Cliente cliente;  // Usamos Cliente en lugar de Usuario
+            Cliente cliente;
             HttpSession session = request.getSession();
 
             // Comprobamos que todos los campos estén rellenos y que las contraseñas coincidan
@@ -94,10 +94,10 @@ public class RegistroController extends HttpServlet {
                     aviso = "Los campos marcados con (*) son obligatorios";
                 }
                 request.setAttribute("errorCreate", aviso);
-                url = ".";  // Volver al formulario de registro
+                url = ".";  // Volver a la página principal (index.jsp)
             } else { // Si no hay errores
                 try {
-                    cliente = new Cliente();  // Usamos la clase Cliente
+                    cliente = new Cliente();
                     
                     // Registrar el convertidor para Enum de genero
                     ConvertUtils.register(new EnumConverter(), Cliente.Genero.class);
@@ -119,7 +119,7 @@ public class RegistroController extends HttpServlet {
                     // Establecer rol como CLIENTE
                     cliente.setRol(Usuario.Rol.CLIENTE);
 
-                    // MANEJAR SUBIDA DE AVATAR
+                    // Subida de avatar
                     Part filePart = request.getPart("avatar");
 
                     if (filePart != null && filePart.getSize() > 0) {
@@ -153,16 +153,15 @@ public class RegistroController extends HttpServlet {
 
                     // Establecer la fecha del último acceso
                     Timestamp ahora = new Timestamp(new Date().getTime());
-                    cliente.setUltimoAcceso(ahora);  // Asegúrate de que la propiedad está en la clase Usuario
+                    cliente.setUltimoAcceso(ahora);
 
-                    // Guardar el usuario (que es un Cliente) en la base de datos
+                    // Guardar el cliente en la base de datos
                     IClienteDAO clienteDAO = new ClienteDAO();
                     clienteDAO.insertOrUpdateCliente(cliente);  // Guardamos el cliente
 
-                    session.setAttribute("usuario", cliente);  // Mete al cliente en la sesión
+                    session.setAttribute("usuario", cliente);  // Meter al cliente en la sesión
 
-                    // Redirigir a la página de completar perfil si es necesario
-                    url = "JSP/Cliente/cliente.jsp";  // Puedes redirigir a otra página según sea necesario
+                    url = "JSP/Cliente/cliente.jsp";  // Página de inicio de cliente
 
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     // Error al usar BeanUtils

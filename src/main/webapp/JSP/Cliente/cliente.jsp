@@ -7,6 +7,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="/INC/metas.inc"/>
         <title>Cliente - Pet Clinic</title>
+        <link rel="icon" href="${contexto}/IMG/logoPetClinic_min.png" type="image/x-icon" />
         <link rel="stylesheet" href="${bootstrap}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
@@ -58,11 +59,11 @@
                     <div class="card shadow-sm h-100">
                         <div class="card-body text-center">
                             <i class="fas fa-calendar-plus fa-3x text-primary mb-3"></i>
-                            <h5 class="card-title">Solicitar Cita</h5>
-                            <p class="card-text">Solicita una nueva cita para tu mascota en cuestión de segundos.</p>
+                            <h5 class="card-title">Citas</h5>
+                            <p class="card-text">Solicita una nueva cita para tu mascota en cuestión de segundos o revisa las que tienes programadas.</p>
                             <form action="ClienteController" method="POST">
-                                <input type="hidden" name="accion" value="solicitarCita">
-                                <button type="submit" class="btn btn-primary btn-block">Solicitar cita</button>
+                                <input type="hidden" name="accion" value="citas">
+                                <button type="submit" class="btn btn-primary btn-block">Gestión de citas</button>
                             </form>
                         </div>
                     </div>

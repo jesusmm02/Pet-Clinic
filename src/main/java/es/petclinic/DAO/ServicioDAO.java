@@ -51,6 +51,19 @@ public class ServicioDAO extends GenericoDAO<Servicio> implements IServicioDAO {
         }
         return listaServicios;
     }
+    
+    @Override
+    public Servicio getServicioById(int idServicio) {
+        Servicio servicio = null;
+        try {
+            startTransaction();
+            servicio = session.get(Servicio.class, idServicio);
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return servicio;
+    }
 
     
 }

@@ -8,12 +8,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="/INC/metas.inc"/>
         <title>Editar perfil - Pet Clinic</title>
+        <link rel="icon" href="${contexto}/IMG/logoPetClinic_min.png" type="image/x-icon" />
         <link rel="stylesheet" href="${bootstrap}">
-        <script src="${contexto}/JS/validarAvatar.js" defer></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
+        <script src="${contexto}/JS/validarAvatar.js" defer></script>
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
+        <script src="${contexto}/JS/passwordEditar.js" defer></script>
         <script src="${contexto}/JS/vistaAvatarEditar.js" defer></script>
-        
+        <script src="${contexto}/JS/quitarAvatarEditar.js" defer></script>
     </head>
     <body>
 
@@ -82,7 +85,7 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label><strong>Nueva Contraseña</strong></label>
-                        <input type="password" class="form-control" name="passwordNueva1">
+                        <input type="password" class="form-control" id="passwordNueva" name="passwordNueva1">
                     </div>
                     <div class="form-group col-md-6">
                         <label><strong>Repetir Nueva Contraseña</strong></label>
@@ -108,8 +111,14 @@
                         </label>
 
                         <div class="border p-3 rounded bg-light">
-                            <input type="file" id="avatar" name="avatar" accept="image/*" class="form-control-file mx-auto">
+                            <input type="file" id="avatar" name="avatar" accept="image/*" class="form-control-file mx-auto">                        
                         </div>
+                        
+                        <div class="mt-2 text-center">
+                            <input type="hidden" name="quitarAvatar" id="quitarAvatar" value="false">
+                            <button type="button" id="btnQuitarAvatar" class="btn btn-sm btn-outline-danger" style="display:none;">Quitar foto</button>
+                        </div>
+                        
                         <p id="avatarError" style="color: red"></p>
                     </div>
                 </div>
@@ -117,7 +126,7 @@
                 <!-- Botones para confirmar o volver -->
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <button type="submit" class="btn btn-primary" name="accion" value="guardarCambios">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-primary" name="accion" id="guardarCambios" value="guardarCambios">Guardar Cambios</button>
                     </div>
                 </div>
                 

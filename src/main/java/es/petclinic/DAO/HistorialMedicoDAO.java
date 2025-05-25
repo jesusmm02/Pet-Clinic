@@ -1,8 +1,11 @@
 package es.petclinic.DAO;
 
 import es.petclinic.beans.HistorialMedico;
+
 import es.petclinic.persistence.HibernateUtil;
+
 import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -212,7 +215,6 @@ public class HistorialMedicoDAO extends GenericoDAO<HistorialMedico> implements 
         try {
             startTransaction();
 
-            // Guardar el historial
             session.save(historial);
 
             endTransaction();
@@ -226,7 +228,6 @@ public class HistorialMedicoDAO extends GenericoDAO<HistorialMedico> implements 
         try {
             startTransaction();
 
-            // Buscar el historial
             HistorialMedico historial = session.get(HistorialMedico.class, idHistorial);
 
             if (historial != null) {

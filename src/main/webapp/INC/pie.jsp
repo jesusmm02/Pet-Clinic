@@ -12,18 +12,18 @@
 
                 <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
                     <h6 class="text-uppercase mb-4 font-weight-bold">Compañía</h6>
-                    <p><a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#modalAccesibilidad">Declaración de Accesibilidad</a></p>
-                    <p><a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#modalCookies">Política de cookies (UE)</a></p>
-                    <p><a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#modalPrivacidad">Declaración de privacidad (UE)</a></p>
-                    <p><a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#modalAvisoLegal">Aviso Legal / Imprint</a></p>
-                    <p><a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#modalDescargo">Descargo de responsabilidad</a></p>
+                    <p><a href="#" class="text-primary-emphasis" data-bs-toggle="modal" data-bs-target="#modalAccesibilidad">Declaración de Accesibilidad</a></p>
+                    <p><a href="#" class="text-primary-emphasis" data-bs-toggle="modal" data-bs-target="#modalCookies">Política de cookies (UE)</a></p>
+                    <p><a href="#" class="text-primary-emphasis" data-bs-toggle="modal" data-bs-target="#modalPrivacidad">Declaración de privacidad (UE)</a></p>
+                    <p><a href="#" class="text-primary-emphasis" data-bs-toggle="modal" data-bs-target="#modalAvisoLegal">Aviso Legal / Imprint</a></p>
+                    <p><a href="#" class="text-primary-emphasis" data-bs-toggle="modal" data-bs-target="#modalDescargo">Descargo de responsabilidad</a></p>
                 </div>
 
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
                     <h6 class="text-uppercase mb-4 font-weight-bold">Contacto</h6>
-                    <p>Montijo, Extremadura, Espa&ntilde;a</p>
-                    <p>infopetclinic@gmail.com</p>
-                    <p>+34 924 56 78 90</p>
+                    <p class="text-primary-emphasis">Montijo, Extremadura, Espa&ntilde;a</p>
+                    <p class="text-primary-emphasis">infopetclinic@gmail.com</p>
+                    <p class="text-primary-emphasis">+34 924 56 78 90</p>
                 </div>
 
                 <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
@@ -50,7 +50,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Pet Clinic se compromete a garantizar la accesibilidad digital para personas con discapacidades. Continuamente estamos mejorando la experiencia del usuario para todos y aplicando los estándares de accesibilidad pertinentes.</p>
+                <p>Pet Clinic se compromete firmemente a garantizar que todos sus servicios digitales sean accesibles para personas con diferentes capacidades, incluyendo aquellas con discapacidades visuales, auditivas, motrices o cognitivas.
+                    Implementamos prácticas y tecnologías conforme a las directrices internacionales de accesibilidad WCAG 2.1 para ofrecer una experiencia inclusiva, fácil de navegar y sin barreras.
+                    Nos esforzamos continuamente en mejorar nuestros estándares y revisamos periódicamente nuestros contenidos para asegurar el cumplimiento con la legislación vigente y fomentar la igualdad de acceso para todos nuestros usuarios.
+                </p>
             </div>
         </div>
     </div>
@@ -64,7 +67,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>En Pet Clinic utilizamos cookies para mejorar tu experiencia de navegación, analizar el tráfico del sitio y ofrecer funciones personalizadas.</p>
+                <p>
+                    En Pet Clinic utilizamos cookies para mejorar tu experiencia de navegación, analizar el tráfico y comportamiento de los usuarios en nuestro sitio web, así como para personalizar contenido y publicidad acorde a tus intereses.
+                    Las cookies nos permiten ofrecer funciones esenciales, garantizar la seguridad y optimizar la usabilidad de la plataforma.
+                    Cumplimos estrictamente con la legislación europea en materia de privacidad y cookies (GDPR), y te informamos claramente sobre los tipos de cookies utilizadas, su finalidad, y cómo puedes gestionarlas o desactivarlas en cualquier momento a través de las opciones de configuración de tu navegador.
+                </p>
             </div>
         </div>
     </div>
@@ -78,7 +85,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Pet Clinic está comprometido con la protección de la privacidad de tus datos personales. Toda la información que recopilamos es tratada con la mayor confidencialidad y según las normativas vigentes.</p>
+                <p>
+                    La privacidad y protección de tus datos personales es una prioridad en Pet Clinic.
+                    Todos los datos recopilados a través de nuestra web se tratan con la máxima confidencialidad, solo con fines específicos y legítimos relacionados con la prestación de nuestros servicios veterinarios y la mejora continua de la atención al cliente.
+                    Cumplimos con el Reglamento General de Protección de Datos (RGPD) de la Unión Europea, garantizando tus derechos de acceso, rectificación, supresión, portabilidad y limitación del tratamiento.
+                    Puedes consultar más detalles sobre cómo gestionamos y protegemos tus datos, así como tus derechos, en esta declaración.
+                </p>
             </div>
         </div>
     </div>
@@ -92,7 +104,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Pet Clinic cumple con todas las regulaciones legales aplicables y proporciona esta información legal para que nuestros usuarios estén informados.</p>
+                <p>
+                    Pet Clinic opera en estricto cumplimiento con la legislación vigente aplicable a los servicios prestados online y a la protección de los usuarios.
+                    En este apartado encontrarás información legal relevante sobre la identidad de nuestra empresa, datos de registro, condiciones generales de uso del sitio web, responsabilidades y limitaciones legales.
+                    Nuestro objetivo es ofrecer transparencia total sobre los términos bajo los cuales proporcionamos nuestros servicios veterinarios digitales, garantizando así una relación clara y segura con nuestros usuarios.
+                </p>
             </div>
         </div>
     </div>
@@ -106,7 +122,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>La información proporcionada en este sitio web es solo para fines informativos y no reemplaza el consejo de un veterinario. Consulta a un profesional para una atención personalizada.</p>
+                <p>
+                    La información publicada en Pet Clinic tiene carácter meramente informativo y no sustituye ni reemplaza la consulta directa con profesionales veterinarios cualificados.
+                    Aunque nos esforzamos por mantener los contenidos actualizados y precisos, no asumimos responsabilidad alguna por posibles errores, omisiones o interpretaciones incorrectas.
+                    Recomendamos siempre consultar a un veterinario certificado para obtener un diagnóstico personalizado, tratamiento adecuado y atención especializada para tu mascota.
+                    Este sitio web no es responsable de cualquier daño derivado del uso o mala interpretación de la información aquí presentada.
+                </p>
             </div>
         </div>
     </div>

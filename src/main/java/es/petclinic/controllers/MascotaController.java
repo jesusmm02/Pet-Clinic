@@ -40,7 +40,7 @@ import org.apache.commons.beanutils.converters.DateConverter;
 )
 public class MascotaController extends HttpServlet {
 
-    private static final String UPLOAD_DIR = "IMG/fotosMascotas";
+    private static final String UPLOAD_DIR = "IMG/fotosMascotas"; // Carpeta donde se guardan las imágenes de las mascotas
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -74,7 +74,7 @@ public class MascotaController extends HttpServlet {
         switch (accion) {
             case "crearMascota":
                 
-                // Obtener las listas de especies y razas de la base de datos
+                // Obtener las listas de especies y razas de la base de datos para los select del formulario
                 IMascotaDAO mascotaDAO = new MascotaDAO();
                 List<String> listaEspecies = mascotaDAO.obtenerEspecies();
                 List<String> listaRazas = mascotaDAO.obtenerRazas();
@@ -112,7 +112,7 @@ public class MascotaController extends HttpServlet {
                         url = "JSP/Mascota/crearMascota.jsp";
                     } else {
                         try {
-                            // Preparar la nueva mascota
+
                             Mascota mascota = new Mascota();
 
                             // Registrar convertidores para enums y fecha
@@ -129,7 +129,7 @@ public class MascotaController extends HttpServlet {
                             // Establecer el propietario (cliente logueado)
                             mascota.setPropietario(propietario);
 
-                            // MANEJAR SUBIDA DE FOTO
+                            // Manejar subida de foto
                             Part filePart = request.getPart("foto");
 
                             if (filePart != null && filePart.getSize() > 0) {
@@ -155,17 +155,17 @@ public class MascotaController extends HttpServlet {
                                 // Guardar archivo
                                 filePart.write(filePath);
 
-                                // Guardar la ruta del avatar en el cliente (solo el nombre del archivo)
+                                // Guardar la ruta de la foto en la mascota (solo el nombre del archivo)
                                 mascota.setFoto(uniqueFileName);
                             } else {
                                 mascota.setFoto("defaultMascota.jpg"); // valor por defecto si no suben foto
                             }
 
-                            // Guardar mascota
+                            // Guardar mascota en la BD
                             mascotaDAO = new MascotaDAO();
                             mascotaDAO.insertarMascota(mascota);
 
-                            // Cargar lista actualizada de mascotas
+                            // Cargar lista actualizada de mascotas del cliente
                             List<Mascota> listaMascotas = mascotaDAO.getMascotasByIdCliente(propietario.getId());
                             request.setAttribute("listaMascotas", listaMascotas);
 
@@ -189,121 +189,137 @@ public class MascotaController extends HttpServlet {
 
             case "editarMascota":
                 try {
-                int idMascota = Integer.parseInt(request.getParameter("id"));
+                    int idMascota = Integer.parseInt(request.getParameter("id"));
 
-                mascotaDAO = new MascotaDAO();
-                Mascota mascota = mascotaDAO.getById(idMascota);
-
-                if (mascota != null) {
-                    
                     mascotaDAO = new MascotaDAO();
-                    listaEspecies = mascotaDAO.obtenerEspecies();
-                    listaRazas = mascotaDAO.obtenerRazas();
+                    Mascota mascota = mascotaDAO.getById(idMascota);
 
-                    // Pasar las listas como atributos de la petición
-                    request.setAttribute("listaEspecies", listaEspecies);
-                    request.setAttribute("listaRazas", listaRazas);
-                    
-                    request.setAttribute("mascota", mascota);
-                    url = "JSP/Mascota/editarMascota.jsp";
-                    break;
-                } else {
-                    request.setAttribute("error", "No se encontró la mascota.");
+                    if (mascota != null) {
+
+                        mascotaDAO = new MascotaDAO();
+                        
+                        // Obtener listas de especies y razas existentes
+                        listaEspecies = mascotaDAO.obtenerEspecies();
+                        listaRazas = mascotaDAO.obtenerRazas();
+
+                        // Pasar las listas como atributos de la petición
+                        request.setAttribute("listaEspecies", listaEspecies);
+                        request.setAttribute("listaRazas", listaRazas);
+
+                        request.setAttribute("mascota", mascota);
+                        url = "JSP/Mascota/editarMascota.jsp";
+                        break;
+                    } else {
+                        request.setAttribute("error", "No se encontró la mascota.");
+                        url = "JSP/Cliente/mascotas.jsp";
+                        break;
+                    }
+                } catch (NumberFormatException e) {
+                    request.setAttribute("error", "ID de mascota no válido.");
                     url = "JSP/Cliente/mascotas.jsp";
-                    break;
                 }
-            } catch (NumberFormatException e) {
-                request.setAttribute("error", "ID de mascota no válido.");
-                url = "JSP/Cliente/mascotas.jsp";
-            }
-            break;
+                break;
 
             case "modificarMascota":
                 try {
-                // Validar campos
-                Enumeration<String> parametros = request.getParameterNames();
-                String error = Utils.comprobarCamposMascota(parametros, request);
+                    // Validar campos obligatorios
+                    Enumeration<String> parametros = request.getParameterNames();
+                    String error = Utils.comprobarCamposMascota(parametros, request);
 
-                if (!error.equals("n")) {
-                    request.setAttribute("errorCreate", "Todos los campos marcados (*) son obligatorios");
+                    if (!error.equals("n")) {
+                        request.setAttribute("errorCreate", "Todos los campos marcados (*) son obligatorios");
 
-                    // Cargar la mascota original para que no se pierdan datos
+                        // Cargar datos originales de la mascota para que no se pierdan
+                        int idMascota = Integer.parseInt(request.getParameter("id"));
+                        mascotaDAO = new MascotaDAO();
+                        Mascota mascota = mascotaDAO.getById(idMascota);
+
+                        mascotaDAO = new MascotaDAO();
+                        listaEspecies = mascotaDAO.obtenerEspecies();
+                        listaRazas = mascotaDAO.obtenerRazas();
+
+                        // Pasar las listas como atributos de la petición
+                        request.setAttribute("listaEspecies", listaEspecies);
+                        request.setAttribute("listaRazas", listaRazas);
+
+                        request.setAttribute("mascota", mascota);
+
+                        url = "JSP/Mascota/editarMascota.jsp";
+                        break;
+                    }
+
                     int idMascota = Integer.parseInt(request.getParameter("id"));
                     mascotaDAO = new MascotaDAO();
                     Mascota mascota = mascotaDAO.getById(idMascota);
-                    
-                    mascotaDAO = new MascotaDAO();
-                    listaEspecies = mascotaDAO.obtenerEspecies();
-                    listaRazas = mascotaDAO.obtenerRazas();
 
-                    // Pasar las listas como atributos de la petición
-                    request.setAttribute("listaEspecies", listaEspecies);
-                    request.setAttribute("listaRazas", listaRazas);
-                    
-                    request.setAttribute("mascota", mascota);
+                    if (mascota != null) {
+                        // Convertidores
+                        ConvertUtils.register(new EnumConverter(), Mascota.Genero.class);
+                        DateConverter dateConverter = new DateConverter(null);
+                        dateConverter.setPattern("yyyy-MM-dd");
+                        ConvertUtils.register(dateConverter, java.util.Date.class);
+                        ConvertUtils.register(dateConverter, java.sql.Date.class);
 
-                    url = "JSP/Mascota/editarMascota.jsp";
-                    break;
-                }
+                        // Actualizar con los nuevos datos
+                        BeanUtils.populate(mascota, request.getParameterMap());
 
-                int idMascota = Integer.parseInt(request.getParameter("id"));
-                mascotaDAO = new MascotaDAO();
-                Mascota mascota = mascotaDAO.getById(idMascota);
-
-                if (mascota != null) {
-                    // Convertidores
-                    ConvertUtils.register(new EnumConverter(), Mascota.Genero.class);
-                    DateConverter dateConverter = new DateConverter(null);
-                    dateConverter.setPattern("yyyy-MM-dd");
-                    ConvertUtils.register(dateConverter, java.util.Date.class);
-                    ConvertUtils.register(dateConverter, java.sql.Date.class);
-
-                    // Actualizar con los nuevos datos
-                    BeanUtils.populate(mascota, request.getParameterMap());
-
-                    // Manejar nueva foto
-                    Part filePart = request.getPart("foto");
-                    if (filePart != null && filePart.getSize() > 0) {
-                        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                        String fileExtension = fileName.substring(fileName.lastIndexOf("."));
-                        String uniqueFileName = System.currentTimeMillis() + fileExtension;
-
-                        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
-                        File uploadDir = new File(uploadPath);
-                        if (!uploadDir.exists()) {
-                            uploadDir.mkdir();
+                        // Lógica para quitar foto con el botón
+                        String quitarFoto = request.getParameter("quitarFoto");
+                        if ("true".equals(quitarFoto)) {
+                            if (mascota.getFoto() != null && !mascota.getFoto().isEmpty()) {
+                                String rutaFoto = getServletContext().getRealPath("/IMG/fotosMascotas/" + mascota.getFoto());
+                                File fileFoto = new File(rutaFoto);
+                                if (fileFoto.exists()) {
+                                    fileFoto.delete();
+                                }
+                            }
+                            mascota.setFoto("defaultMascota.jpg");
                         }
 
-                        String filePath = uploadPath + File.separator + uniqueFileName;
-                        filePart.write(filePath);
+                        // Manejar nueva foto
+                        Part filePart = request.getPart("foto");
+                        if (filePart != null && filePart.getSize() > 0) {
+                            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                            String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+                            String uniqueFileName = System.currentTimeMillis() + fileExtension;
 
-                        mascota.setFoto(uniqueFileName);
+                            String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
+                            File uploadDir = new File(uploadPath);
+                            if (!uploadDir.exists()) {
+                                uploadDir.mkdir();
+                            }
+
+                            String filePath = uploadPath + File.separator + uniqueFileName;
+                            filePart.write(filePath);
+
+                            mascota.setFoto(uniqueFileName);
+                        }
+
+                        // Guardar mascota actualizada en la BD
+                        mascotaDAO.actualizarMascota(mascota);
+
+                        // Recargar lista de mascotas del cliente
+                        HttpSession session = request.getSession(false);
+                        if (session != null && session.getAttribute("usuario") != null) {
+                            Cliente cliente = (Cliente) session.getAttribute("usuario");
+                            List<Mascota> lista = mascotaDAO.getMascotasByIdCliente(cliente.getId());
+                            request.setAttribute("listaMascotas", lista);
+                        }
+
+                        request.setAttribute("editada", "Mascota actualizada correctamente.");
+                        url = "JSP/Cliente/mascotas.jsp";
+
+                    } else {
+                        request.setAttribute("error", "No se encontró la mascota.");
+                        url = "JSP/Cliente/mascotas.jsp";
                     }
 
-                    mascotaDAO.actualizarMascota(mascota);
-
-                    // Recargar lista
-                    HttpSession session = request.getSession(false);
-                    if (session != null && session.getAttribute("usuario") != null) {
-                        Cliente cliente = (Cliente) session.getAttribute("usuario");
-                        List<Mascota> lista = mascotaDAO.getMascotasByIdCliente(cliente.getId());
-                        request.setAttribute("listaMascotas", lista);
-                    }
-
-                    request.setAttribute("editada", "Mascota actualizada correctamente.");
-                    url = "JSP/Cliente/mascotas.jsp";
-
-                } else {
-                    request.setAttribute("error", "No se encontró la mascota.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    request.setAttribute("error", "Error al actualizar la mascota.");
                     url = "JSP/Cliente/mascotas.jsp";
                 }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                request.setAttribute("error", "Error al actualizar la mascota.");
-                url = "JSP/Cliente/mascotas.jsp";
-            }
-            break;
+                break;
 
             case "eliminarMascota":
                 
@@ -313,7 +329,7 @@ public class MascotaController extends HttpServlet {
 
                     mascotaDAO.eliminarMascota(idMascota);
 
-                    // Volver a cargar la lista actualizada
+                    // Volver a cargar la lista de mascotas del cliente actualizada
                     HttpSession sessionEliminar = request.getSession(false);
                     if (sessionEliminar != null && sessionEliminar.getAttribute("usuario") != null) {
                         Cliente cliente = (Cliente) sessionEliminar.getAttribute("usuario");

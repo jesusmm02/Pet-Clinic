@@ -1,3 +1,13 @@
+/**
+ * 
+ * Vista previa del avatar seleccionado por el usuario.
+ *
+ * Este script:
+ * - Lee la imagen seleccionada desde el input.
+ * - Muestra la vista previa en un <img> con ID 'vistaPreviaAvatar'.
+ * - Ajusta el tamaño de la imagen a 100x100 píxeles.
+ * 
+ */
 document.getElementById('avatar').addEventListener('change', function(event) {
     var archivo = event.target.files[0]; // Obtener el archivo seleccionado
     console.log(archivo); // Verifica que el archivo se haya cargado correctamente

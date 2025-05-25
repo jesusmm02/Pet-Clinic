@@ -9,14 +9,17 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="/INC/metas.inc"/>
         <title>Pet Clinic</title>
+        <link rel="icon" href="${contexto}/IMG/logoPetClinic_min.png" type="image/x-icon" />
         <link rel="stylesheet" href="${bootstrap}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
         <script src="${contexto}/JS/comprobarEmail.js" defer></script>
         <script src="${contexto}/JS/numIdentificacion.js" defer></script>
+        <script src="${contexto}/JS/password.js" defer></script>
         <script src="${contexto}/JS/validarAvatar.js" defer></script>
         <script src="${contexto}/JS/vistaAvatar.js" defer></script>
+        <script src="${contexto}/JS/quitarAvatar.js" defer></script>
     </head>
     <body>
 
@@ -80,19 +83,29 @@
             <h2 class="text-center mb-4">Nuestros Servicios</h2>
             <div class="row text-center">
                 <div class="col-md-4 mb-4">
-                    <i class="fas fa-stethoscope fa-3x mb-3 text-primary"></i>
-                    <h5>Consultas Generales</h5>
-                    <p>Evaluaciones médicas completas para perros y gatos.</p>
+                    <i class="fas fa-scissors fa-3x mb-3 text-primary"></i>
+                    <h5>Peluquería</h5>
+                    <p>Sesión completa de peluquería animal que incluye baño, cepillado, corte de pelo, corte de uñas, limpieza de oídos y perfume suave. Atención personalizada en un entorno tranquilo.</p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <i class="fas fa-syringe fa-3x mb-3 text-success"></i>
                     <h5>Vacunación</h5>
-                    <p>Protége a tu mascota con nuestras vacunas al día.</p>
+                    <p>Servicio de vacunación para animales con control veterinario, aplicación de vacunas obligatorias y asesoramiento sobre el calendario vacunal. Ambiente seguro y trato profesional.</p>
                 </div>
                 <div class="col-md-4 mb-4">
-                    <i class="fas fa-dog fa-3x mb-3 text-warning"></i>
-                    <h5>Peluquería Canina</h5>
-                    <p>¡Baño, corte y mucho amor para tu mascota!</p>
+                    <i class="fas fa-microscope fa-3x mb-3 text-warning"></i>
+                    <h5>Análisis</h5>
+                    <p>Servicio de análisis clínicos para animales: extracción de muestras, diagnóstico preventivo y entrega de resultados. Supervisado por veterinario.</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <i class="fas fa-id-badge fa-3x mb-3 text-info"></i>
+                    <h5>Implantación de microchip</h5>
+                    <p>Implantación de microchip para identificación permanente del animal. Incluye registro oficial y control veterinario. Procedimiento rápido y seguro.</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <i class="fas fa-bug fa-3x mb-3 text-danger"></i>
+                    <h5>Desparasitación</h5>
+                    <p>Tratamiento antiparasitario completo para prevenir y eliminar parásitos internos y externos. Incluye revisión veterinaria, aplicación del producto y asesoramiento personalizado.</p>
                 </div>
             </div>
         </section>
@@ -107,40 +120,6 @@
                     <h3>Conócenos</h3>
                     <p>Pet Clinic nació con el amor por los animales en el corazón. Nuestro equipo de veterinarios y auxiliares está comprometido con brindar el mejor cuidado a tu mascota, con un trato humano, cercano y profesional.</p>
                     <p>Visítanos y descubre por qué nuestras mascotas y sus dueños nos recomiendan.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Galería de mascotas -->
-        <section class="container my-5">
-            <h2 class="text-center mb-4">¡Nuestros pacientes más felices!</h2>
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="${contexto}/IMG/perro1.jpg" class="card-img-top" style="height: 250px; object-fit: cover;">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">Max</h5>
-                            <p class="card-text">Max vino con fiebre y se fue con una gran sonrisa peluda 🐶.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="${contexto}/IMG/gato1.jpg" class="card-img-top" style="height: 250px; object-fit: cover;">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">Luna</h5>
-                            <p class="card-text">Nuestra estrella felina recibió su vacuna y un premio 🍖.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="${contexto}/IMG/conejo1.jpg" class="card-img-top" style="height: 250px; object-fit: cover;">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">Bunny</h5>
-                            <p class="card-text">¡Una revisión rápida y a seguir brincando feliz! 🐰</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -243,9 +222,9 @@
                                 <div class="col-md-6">
                                     <label for="genero" class="form-label">* Género</label>
                                     <select class="form-select" id="genero" name="genero">
-                                        <option value="MUJER" ${usuario.genero == 'MUJER' ? 'selected' : ''}>Mujer</option>
-                                        <option value="HOMBRE" ${usuario.genero == 'HOMBRE' ? 'selected' : ''}>Hombre</option>
-                                        <option value="OTRO" ${usuario.genero == 'OTRO' ? 'selected' : ''}>Otro</option>
+                                        <option value="MUJER">Mujer</option>
+                                        <option value="HOMBRE">Hombre</option>
+                                        <option value="OTRO">Otro</option>
                                     </select>
                                 </div>
 
@@ -302,6 +281,7 @@
                                     
                                     <div class="mt-3 border p-2 rounded bg-light text-center" style="max-width: 150px;">
                                         <img class="img-fluid rounded-circle" id="vistaPreviaAvatar" style="max-width: 150px; max-height: 150px;">
+                                        <button type="button" id="btnQuitarAvatar" class="btn btn-sm btn-outline-danger mt-2" style="display:none;">Quitar foto</button>
                                     </div>
 
                                     <p id="avatarError" style="color: red"></p>

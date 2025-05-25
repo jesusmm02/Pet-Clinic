@@ -7,12 +7,14 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="/INC/metas.inc"/>
         <title>Registrar Mascota - Pet Clinic</title>
+        <link rel="icon" href="${contexto}/IMG/logoPetClinic_min.png" type="image/x-icon" />
         <link rel="stylesheet" href="${bootstrap}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
         <script src="${contexto}/JS/validarAvatarMascota.js" defer></script>
         <script src="${contexto}/JS/vistaAvatarMascota.js" defer></script>
+        <script src="${contexto}/JS/quitarFoto.js" defer></script>
         <script src="${contexto}/JS/selectMascotas.js" defer></script>
     </head>
     <body>
@@ -98,6 +100,7 @@
                         <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
                         <small class="form-text text-muted">Se permite .png, .jpg o .jpeg</small>
                         <img class="mt-2" id="vistaPreviaFoto">
+                        <button type="button" id="btnQuitarFoto" class="btn btn-sm btn-outline-danger mt-2" style="display:none;">Quitar foto</button>
                         <p id="fotoError" style="color: red"></p>
                     </div>
                 </div>

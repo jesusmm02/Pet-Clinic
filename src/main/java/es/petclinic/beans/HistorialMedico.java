@@ -16,25 +16,43 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ * 
+ * Entidad HistorialMedico:
+ * Representa una entrada de historial clínico para una mascota, incluyendo
+ * la fecha, descripción del problema o diagnóstico y el tratamiento aplicado.
+ * 
+ * @author Jesús
+ */
 @Entity
 @Table(name = "historialesMedicos")
 public class HistorialMedico implements Serializable {
     
+    // Clave primaria
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdHistorial")
     private Integer id;
 
+    // Fecha del historial.
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "Fecha", nullable = false)
     private Date fecha;
 
+    // Descripción del diagnóstico.
     @Column(name = "Descripcion", length = 100)
     private String descripcion;
 
+    // Tratamiento aplicado.
     @Column(name = "Tratamiento", length = 100)
     private String tratamiento;
 
+    /**
+     * 
+     * Relación muchos a uno con mascota.
+     * Muchos historiales médicos pueden pertenecer a una misma mascota.
+     * 
+     */
     @ManyToOne
     @JoinColumn(name = "IdMascota", nullable = false,
                 foreignKey = @ForeignKey(name = "FK_historialesMedicos_mascotas"))

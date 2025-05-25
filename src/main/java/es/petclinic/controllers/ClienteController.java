@@ -51,7 +51,7 @@ import org.apache.commons.beanutils.converters.DateConverter;
 )
 public class ClienteController extends HttpServlet {
 
-    private static final String UPLOAD_DIR = "IMG/avatares";
+    private static final String UPLOAD_DIR = "IMG/avatares"; // Carpeta donde se guardan los avatares
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -85,11 +85,12 @@ public class ClienteController extends HttpServlet {
         switch (accion) {
             case "homeCliente":
 
-                url = "JSP/Cliente/cliente.jsp";
-                
+                url = "JSP/Cliente/cliente.jsp"; // Página inicial de cliente
+
                 break;
             case "gestionMascotas":
 
+                // Cargar lista de mascotas del cliente que está en sesión
                 HttpSession sessionMascotas = request.getSession(false);
                 if (sessionMascotas != null && sessionMascotas.getAttribute("usuario") != null) {
                     Usuario usuario = (Usuario) sessionMascotas.getAttribute("usuario");
@@ -104,40 +105,42 @@ public class ClienteController extends HttpServlet {
                 }
 
                 break;
-            case "solicitarCita":
-                url = "JSP/Cliente/solicitarCita.jsp";
+            case "citas":
+                
+                url = "JSP/Cliente/gestionarCitas.jsp"; // Página inicial de gestión de citas
+                
                 break;
             case "historialMedico":
                 try {
-                // Recuperar el cliente de la sesión
-                Usuario cliente = (Usuario) request.getSession().getAttribute("usuario");
+                    // Recuperar el cliente de la sesión
+                    Usuario cliente = (Usuario) request.getSession().getAttribute("usuario");
 
-                if (cliente != null) {
-                    // Obtener todas las mascotas del cliente
-                    MascotaDAO mascotaDAO = new MascotaDAO();
-                    List<Mascota> listaMascotas = mascotaDAO.getMascotasByIdCliente(cliente.getId());
+                    if (cliente != null) {
+                        // Obtener todas las mascotas del cliente
+                        MascotaDAO mascotaDAO = new MascotaDAO();
+                        List<Mascota> listaMascotas = mascotaDAO.getMascotasByIdCliente(cliente.getId());
 
-                    // Obtener todos los historiales asociados a esas mascotas
-                    IHistorialMedicoDAO historialDAO = new HistorialMedicoDAO();
-                    List<HistorialMedico> listaHistoriales = new ArrayList<>();
+                        // Obtener todos los historiales asociados a esas mascotas
+                        IHistorialMedicoDAO historialDAO = new HistorialMedicoDAO();
+                        List<HistorialMedico> listaHistoriales = new ArrayList<>();
 
-                    for (Mascota mascota : listaMascotas) {
-                        List<HistorialMedico> historialesMascota = historialDAO.getHistorialesByIdMascota(mascota.getId());
-                        listaHistoriales.addAll(historialesMascota);
+                        for (Mascota mascota : listaMascotas) {
+                            List<HistorialMedico> historialesMascota = historialDAO.getHistorialesByIdMascota(mascota.getId());
+                            listaHistoriales.addAll(historialesMascota);
+                        }
+
+                        // Pasar los datos a la vista
+                        request.setAttribute("listaHistoriales", listaHistoriales);
+                        request.setAttribute("listaMascotas", listaMascotas);
                     }
 
-                    // Pasar los datos a la vista
-                    request.setAttribute("listaHistoriales", listaHistoriales);
-                    request.setAttribute("listaMascotas", listaMascotas);
+                    url = "JSP/Cliente/historialMedico.jsp";
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-                url = "JSP/Cliente/historialMedico.jsp";
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            break;
+                break;
             case "verServicios":
                 IServicioDAO servicioDAO = new ServicioDAO();
                 List<Servicio> listaServicios = servicioDAO.obtenerServicios();
@@ -145,7 +148,7 @@ public class ClienteController extends HttpServlet {
                 url = "JSP/Cliente/servicios.jsp";
                 break;
             case "verInfografia":
-                url = "JSP/Cliente/infografia.jsp";
+                url = "JSP/Cliente/infografia.jsp"; // Página de infografía
                 break;
             case "editarPerfil":
 
@@ -165,6 +168,8 @@ public class ClienteController extends HttpServlet {
                 }
 
                 break;
+                
+            // Procesa la edición del perfil del cliente    
             case "guardarCambios":
 
                 session = request.getSession(false);
@@ -186,19 +191,34 @@ public class ClienteController extends HttpServlet {
                         request.getRequestDispatcher("JSP/Cliente/editarPerfil.jsp").forward(request, response);
                         return;
                     }
+                    
+                    // Lógica para quitar foto con el botón
+                    String quitarFoto = request.getParameter("quitarAvatar");
+                    if ("true".equals(quitarFoto)) {
+                        // Borrar archivo físico si existe
+                        if (usuario.getAvatar() != null && !usuario.getAvatar().isEmpty()) {
+                            String rutaFoto = getServletContext().getRealPath("/IMG/avatares/" + usuario.getAvatar());
+                            File fileFoto = new File(rutaFoto);
+                            if (fileFoto.exists()) {
+                                fileFoto.delete();
+                            }
+                        }
+                        // Actualizar usuario para quitar avatar
+                        usuario.setAvatar("default.jpg");
+                    }
 
                     // Actualizar campos del usuario
                     usuario.setNombre(nombre);
                     usuario.setApellidos(apellidos);
 
-                    // ACTUALIZAR CLIENTE
+                    // Obtener cliente y actualizar datos personales
                     IClienteDAO clienteDAO = new ClienteDAO();
                     Cliente cliente = clienteDAO.getByIdUsuario(usuario.getId());
 
                     String generoStr = request.getParameter("genero");
                     String fechaNacimientoStr = request.getParameter("fechaNacimiento");
 
-                    // Registrar convertidores solo una vez (puedes mover esto a una clase utilitaria si prefieres)
+                    // Conversión de enums y fechas
                     ConvertUtils.register(new EnumConverter(), Cliente.Genero.class);
 
                     DateConverter dateConverter = new DateConverter(null);
@@ -206,18 +226,17 @@ public class ClienteController extends HttpServlet {
                     ConvertUtils.register(dateConverter, java.util.Date.class);
                     ConvertUtils.register(dateConverter, java.sql.Date.class);
 
-                    // Usar ConvertUtils directamente
                     Cliente.Genero genero = (Cliente.Genero) ConvertUtils.convert(generoStr, Cliente.Genero.class);
                     Date fechaNacimiento = (Date) ConvertUtils.convert(fechaNacimientoStr, java.util.Date.class);
 
-                    // Asignar manualmente
+                    // Asignar manualmente género y fecha de nacimiento
                     cliente.setGenero(genero);
                     cliente.setFechaNacimiento(fechaNacimiento);
 
                     // Contraseña
                     String passwordActual = request.getParameter("passwordActual");
-                    String passwordNueva1 = request.getParameter("passwordNueva1");
-                    String passwordNueva2 = request.getParameter("passwordNueva2");
+                    String passwordNueva1 = request.getParameter("passwordNueva1"); // Password nueva
+                    String passwordNueva2 = request.getParameter("passwordNueva2"); // Confirmación de password nueva
 
                     // Validar cambio de contraseña
                     if (passwordActual != null && !passwordActual.isEmpty()) {
@@ -260,10 +279,11 @@ public class ClienteController extends HttpServlet {
                         usuario.setAvatar(uniqueFileName);
                     }
 
+                    // Guardar cambios en la base de datos
                     try {
                         usuDAO.insertOrUpdateUsuario(usuario);
                         clienteDAO.insertOrUpdateCliente(cliente);
-                        
+
                         usuario = usuDAO.getById(usuario.getId());
                         cliente = clienteDAO.getByIdUsuario(usuario.getId());
 
@@ -274,7 +294,7 @@ public class ClienteController extends HttpServlet {
                         return;
 
                     } catch (IOException | ServletException e) {
-                        e.printStackTrace(); // o loguear si tienes logger
+                        e.printStackTrace();
                         request.setAttribute("error", "Error al actualizar los datos. Inténtalo más tarde.");
                         request.getRequestDispatcher("/JSP/Cliente/editarPerfil.jsp").forward(request, response);
                         return;
@@ -286,6 +306,7 @@ public class ClienteController extends HttpServlet {
 
                 break;
 
+            // Para volver a la vista página principal del cliente
             case "volver":
                 url = "JSP/Cliente/cliente.jsp";
                 break;

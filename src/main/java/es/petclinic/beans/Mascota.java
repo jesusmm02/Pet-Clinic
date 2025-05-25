@@ -17,42 +17,65 @@ import javax.persistence.ManyToOne;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+/**
+ * 
+ * Entidad Mascota:
+ * Representa un animal registrado por un cliente (propietario), con sus datos
+ * personales básicos.
+ * 
+ * @author Jesús
+ */
 @Entity
 @Table(name = "mascotas")
 public class Mascota implements Serializable {
     
+    // Clave primaria
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdMascota")
     private Integer id;
     
+    // Nombre de la mascota.
     @Column(name = "Nombre", length = 30, nullable = false)
     private String nombre;
     
+    // Especie de la mascota.
     @Column(name = "Especie", length = 40, nullable = false)
     private String especie;
     
+    // Raza de la mascota.
     @Column(name = "Raza", length = 60, nullable = false)
     private String raza;
     
+    // Fecha  de nacimiento de la mascota (puede ser nula)
     @Temporal(TemporalType.DATE)
     @Column(name = "FechaNacimiento", nullable = true)
     private Date fechaNacimiento;
     
+    // Peso en kilogramos con precisión decimal.
     @Column(name = "Peso", precision = 5, scale = 2)
     private Double peso;
     
+    // Género de la mascota.
     @Enumerated(EnumType.STRING)
     @Column(name = "Genero", length = 6)
     private Genero genero;
     
+    // Enum con valores posibles de género.
      public enum Genero {
         MACHO, HEMBRA
     }
-     
-    @Column(name = "Foto", length = 30, nullable = false)
-    private String foto = "foto.png";
     
+    // Foto de perfil de la mascota
+    @Column(name = "Foto", length = 30, nullable = false)
+    private String foto = "foto.png"; // por defecto
+    
+    /**
+     * 
+     * Relación muchos a uno con propietario.
+     * Muchas mascotas pueden pertenecer al mismo cliente.
+     * 
+     */
     @ManyToOne
     @JoinColumn(name = "IdUsuario", nullable = false,
                 foreignKey = @ForeignKey(name = "FK_mascotas_usuarios"))

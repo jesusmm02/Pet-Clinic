@@ -17,6 +17,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
+/**
+ * 
+ * Entidad Usuario:
+ * Clase base para todos los usuarios del sistema (Clientes y Veterinarios).
+ * Utiliza herencia JOINED para dividir los atributos comunes y específicos
+ * en tablas distintas.
+ * 
+ * @author Jesús
+ */
 @Entity
 @Table(name = "usuarios", uniqueConstraints = { // Campos que no pueden tener valores repetidos
     @UniqueConstraint(columnNames = "NumIdentificacion", name = "UK_usuario_numIdentificacion"),
@@ -25,40 +34,50 @@ import javax.persistence.UniqueConstraint;
 @Inheritance(strategy = InheritanceType.JOINED) // Herencia entre clases
 public class Usuario implements Serializable {
     
+    // Clave primaria
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdUsuario")
     private Integer id;
     
+    // Nombre del usuario.
     @Column(name = "Nombre", length = 30)
     private String nombre;
     
+    // Apellidos del usuario.
     @Column(name = "Apellidos", length = 60)
     private String apellidos;
     
+    // Número de DNI o NIE.
     @Column(name = "NumIdentificacion", length = 9, nullable = false)
     private String numIdentificacion;
     
+    // Email del usuario.
     @Column(name = "Email", length = 80, nullable = false)
     private String email;
     
+    // Contraseña del usuario.
     @Column(name = "Password", length = 128, nullable = false)
     private String password;
     
+    // Rol del usuario.
     @Enumerated(EnumType.STRING)
     @Column(name = "Rol", length = 11, nullable = false)
     private Rol rol;
     
+    // Enumeración de roles posibles que puede tener un usuario.
     public enum Rol {
         VETERINARIO, CLIENTE
     }
     
+    // Última fecha en la que el usuario accedió al sistema.
     @Temporal(TemporalType.DATE)
     @Column(name = "UltimoAcceso")
     private Date ultimoAcceso;
     
+    // Avatar del usuario.
     @Column(name = "Avatar", length = 30, nullable = false)
-    private String avatar = "avatar.png";
+    private String avatar = "avatar.png"; // por defecto
 
     
     

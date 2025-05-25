@@ -3,10 +3,18 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        
+        <!-- Muestra las consultas SQL generadas por Hibernate en la consola. -->
         <property name="hibernate.show_sql">true</property>
+        
+         <!-- Formatea las consultas SQL mostradas para que sean más legibles. -->
         <property name="hibernate.format_sql">true</property>
+        
+        <!-- Autogeneración de tablas "al vuelo" en el caso de que no existieran. -->
         <property name="hibernate.hbm2ddl.auto">update</property>
-        <property name="hibernate.connection.datasource">java:comp/env/jdbc/petclinic</property> 
+        <property name="hibernate.connection.datasource">java:comp/env/jdbc/petclinic</property>
+        
+         <!-- Mapeo de las clases Java con anotaciones JPA para que Hibernate las reconozca como entidades -->
         <mapping class="es.petclinic.beans.Usuario"/>
         <mapping class="es.petclinic.beans.Veterinario"/>
         <mapping class="es.petclinic.beans.Cliente"/>

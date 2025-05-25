@@ -7,6 +7,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="/INC/metas.inc"/>
         <title>Infografía - Pet Clinic</title>
+        <link rel="icon" href="${contexto}/IMG/logoPetClinic_min.png" type="image/x-icon" />
         <link rel="stylesheet" href="${bootstrap}">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="${contexto}/JS/grafico.js" defer></script>

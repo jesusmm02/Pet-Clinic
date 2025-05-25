@@ -52,6 +52,21 @@ public class UsuarioDAO extends GenericoDAO<Usuario> implements IUsuarioDAO {
         }
         return usuario;
     }
+    
+    @Override
+    public Usuario getVeterinario() {
+        Usuario veterinario = null;
+        try {
+            startTransaction();
+            Query<Usuario> query = session.createQuery("FROM Usuario u WHERE u.rol = 'VETERINARIO'", Usuario.class);
+            veterinario = query.uniqueResult();
+            endTransaction();
+        } catch (HibernateException he) {
+            handleException(he);
+        }
+        return veterinario;
+    }
+
 
     @Override
     public Usuario obtenerPorEmail(String email) {
