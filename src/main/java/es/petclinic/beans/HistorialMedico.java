@@ -40,11 +40,11 @@ public class HistorialMedico implements Serializable {
     private Date fecha;
 
     // Descripción del diagnóstico.
-    @Column(name = "Descripcion", length = 100)
+    @Column(name = "Descripcion", length = 255)
     private String descripcion;
 
     // Tratamiento aplicado.
-    @Column(name = "Tratamiento", length = 100)
+    @Column(name = "Tratamiento", length = 255)
     private String tratamiento;
 
     /**

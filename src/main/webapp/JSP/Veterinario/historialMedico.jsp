@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="${contexto}/CSS/mensajeFlotante.css">
         <script src="${contexto}/JS/mensajeFlotante.js" defer></script>
+        <script src="${contexto}/JS/limiteCaracteres.js" defer></script>
         <script>
             function limpiarFiltros() {
                 // Restablecer todos los select a su valor por defecto
@@ -21,6 +22,12 @@
                 document.getElementById('raza').selectedIndex = 0;
             }
         </script>
+        <style>
+            .contador { font-weight: bold; }
+            .contador.verde { color: #198754; }
+            .contador.naranja { color: #fd7e14; }
+            .contador.rojo { color: #dc3545; }
+        </style>
     </head>
     <body>
 
@@ -148,11 +155,17 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="descripcion" class="form-label">Descripción:</label>
-                                    <textarea name="descripcion" id="descripcion" class="form-control" rows="3"></textarea>
+                                    <textarea name="descripcion" id="descripcion" class="form-control" rows="3" maxlength="255"></textarea>
+                                    <div class="form-text text-end">
+                                        <span id="contadorDescripcion" class="contador">0</span>/255 caracteres
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="tratamiento" class="form-label">Tratamiento:</label>
-                                    <textarea name="tratamiento" id="tratamiento" class="form-control" rows="3"></textarea>
+                                    <textarea name="tratamiento" id="tratamiento" class="form-control" rows="3" maxlength="255"></textarea>
+                                    <div class="form-text text-end">
+                                        <span id="contadorTratamiento" class="contador">0</span>/255 caracteres
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">

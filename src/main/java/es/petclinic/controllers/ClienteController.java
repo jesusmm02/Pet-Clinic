@@ -247,11 +247,15 @@ public class ClienteController extends HttpServlet {
                                 String hashedNuevaPassword = Utils.hashMD5(passwordNueva1);
                                 usuario.setPassword(hashedNuevaPassword);
                             } else {
+                                request.setAttribute("usuario", usuario);
+                                request.setAttribute("cliente", cliente);
                                 request.setAttribute("error", "Las contraseñas nuevas no coinciden");
                                 request.getRequestDispatcher("JSP/Cliente/editarPerfil.jsp").forward(request, response);
                                 return;
                             }
                         } else {
+                            request.setAttribute("usuario", usuario);
+                            request.setAttribute("cliente", cliente);
                             request.setAttribute("error", "La contraseña actual no es correcta");
                             request.getRequestDispatcher("JSP/Cliente/editarPerfil.jsp").forward(request, response);
                             return;
