@@ -20,6 +20,28 @@
         <script src="${contexto}/JS/validarAvatar.js" defer></script>
         <script src="${contexto}/JS/vistaAvatar.js" defer></script>
         <script src="${contexto}/JS/quitarAvatar.js" defer></script>
+        <style>
+            .modal-dialog {
+              max-width: 800px;
+              width: 90vw;
+            }
+            .modal-content {
+              max-height: 90vh;
+              display: flex;
+              flex-direction: column;
+            }
+            .modal-body {
+              overflow-y: auto;
+              max-height: calc(90vh - 140px)
+            }
+            .modal-footer {
+              border-top: 1px solid #dee2e6;
+              padding-top: 1rem;
+              padding-bottom: 1rem;
+              background-color: #fff;
+              flex-shrink: 0;
+            }
+        </style>
     </head>
     <body>
 
@@ -65,7 +87,7 @@
                     <img src="${contexto}/IMG/carrusel3.jpg" class="d-block w-100" style="object-fit: cover; height: 400px;">
                     <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
                         <h2 class="text-white">Servicios completos</h2>
-                        <p>Vacunación, cirugía, desparasitación y más</p>
+                        <p>Vacunación, análisis, desparasitación y más</p>
                     </div>
                 </div>
             </div>
@@ -197,7 +219,7 @@
 
         <!-- Modal de Registro -->
         <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <form action="${contexto}/RegistroController" method="POST" enctype="multipart/form-data">
                         <div class="modal-header">

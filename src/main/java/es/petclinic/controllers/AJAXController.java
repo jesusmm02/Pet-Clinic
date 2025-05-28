@@ -11,6 +11,8 @@ import es.petclinic.beans.Cita;
 import es.petclinic.beans.Usuario;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,15 +118,26 @@ public class AJAXController extends HttpServlet {
                     } else {
                         citas = citaDAO.getAllCitas();
                     }
+                    
+                    // Fecha y hora actual para comparar
+                    LocalDateTime ahora = LocalDateTime.now();
 
                     // Formatear las citas en objetos compatibles con calendarios JS
                     List<Map<String, Object>> eventos = new ArrayList<>();
                     for (Cita cita : citas) {
-                        Map<String, Object> evento = new HashMap<>();
-                        evento.put("id", cita.getId());
-                        evento.put("title", cita.getServicio().getNombre());
-                        evento.put("start", cita.getCalendario().getFecha() + "T" + cita.getCalendario().getHoraInicio());
-                        eventos.add(evento);
+                        LocalDate fechaCita = cita.getCalendario().getFecha();
+                        LocalTime horaInicio = cita.getCalendario().getHoraInicio();
+
+                        LocalDateTime fechaHoraCita = LocalDateTime.of(fechaCita, horaInicio);
+
+                        // Filtrar solo citas futuras o actuales
+                        if (!fechaHoraCita.isBefore(ahora)) {
+                            Map<String, Object> evento = new HashMap<>();
+                            evento.put("id", cita.getId());
+                            evento.put("title", cita.getServicio().getNombre());
+                            evento.put("start", cita.getCalendario().getFecha() + "T" + cita.getCalendario().getHoraInicio());
+                            eventos.add(evento);
+                        }
                     }
 
                     response.setContentType("application/json");

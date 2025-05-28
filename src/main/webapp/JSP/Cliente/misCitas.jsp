@@ -145,46 +145,6 @@
                     </div>
                 </c:otherwise>
             </c:choose>
-
-            <hr>        
-
-            
-            <!-- Sección citas pasadas -->
-            <h3 class="mt-5">Historial de citas pasadas</h3>
-            <c:choose>
-                <c:when test="${not empty citasPasadas}">
-                    <div class="row g-4">
-                        <c:forEach var="cita" items="${citasPasadas}">
-                            <div class="col-md-6">
-                                <div class="card shadow-sm h-100">
-                                    <div class="card-header bg-light d-flex align-items-center">
-                                        <i class="fas fa-calendar-check fa-2x text-secondary me-3"></i>
-                                        <div>
-                                            <h5 class="mb-0">${cita.servicio.nombre}</h5>
-                                            <small class="text-muted">
-                                                Fecha: <fmt:formatDate value="${fechasFormateadasPasadas[cita.id]}" pattern="dd/MM/yyyy" />
-                                                Hora: ${horariosCitasPasadas[cita.id]}
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h6 class="text-secondary">Mascota:</h6>
-                                        <p>${cita.mascota.nombre} (${cita.mascota.especie})</p>
-
-                                        <h6 class="text-secondary">Veterinario:</h6>
-                                        <p>${cita.veterinario.nombre} ${cita.veterinario.apellidos}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="alert alert-info text-center">
-                        No tienes citas pasadas.
-                    </div>
-                </c:otherwise>
-            </c:choose>
             
         </div>
 

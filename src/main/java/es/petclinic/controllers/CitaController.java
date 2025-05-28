@@ -184,7 +184,6 @@ public class CitaController extends HttpServlet {
 
                     // Crear listas separadas para clasificar las citas
                     List<Cita> citasFuturas = new ArrayList<>();
-                    List<Cita> citasPasadas = new ArrayList<>();
 
                     // Fecha y hora actual para clasificar las citas
                     LocalDate hoy = LocalDate.now();
@@ -197,8 +196,6 @@ public class CitaController extends HttpServlet {
 
                         if (fechaCita.isAfter(hoy) || (fechaCita.isEqual(hoy) && horaInicio.isAfter(ahora))) {
                             citasFuturas.add(cita);
-                        } else {
-                            citasPasadas.add(cita);
                         }
                     }
 
@@ -206,8 +203,6 @@ public class CitaController extends HttpServlet {
                     Map<Integer, String> horariosCitasFuturas = new HashMap<>();
                     Map<Integer, Date> fechasFormateadasFuturas = new HashMap<>();
 
-                    Map<Integer, String> horariosCitasPasadas = new HashMap<>();
-                    Map<Integer, Date> fechasFormateadasPasadas = new HashMap<>();
 
                     // Rellenar el mapa citasFuturas con citas futuras
                     for (Cita cita : citasFuturas) {
@@ -218,23 +213,11 @@ public class CitaController extends HttpServlet {
                         fechasFormateadasFuturas.put(cita.getId(), java.sql.Date.valueOf(cita.getCalendario().getFecha()));
                     }
 
-                    // Rellenar el mapa citasPasadas con citas pasadas
-                    for (Cita cita : citasPasadas) {
-                        LocalTime horaInicio = cita.getCalendario().getHoraInicio();
-                        int duracion = cita.getServicio().getDuracion();
-                        LocalTime horaFinCalculada = horaInicio.plusMinutes(duracion);
-                        horariosCitasPasadas.put(cita.getId(), horaInicio + " - " + horaFinCalculada);
-                        fechasFormateadasPasadas.put(cita.getId(), java.sql.Date.valueOf(cita.getCalendario().getFecha()));
-                    }
 
                     // Pasar atributos a la vista
                     request.setAttribute("citasFuturas", citasFuturas);
                     request.setAttribute("horariosCitasFuturas", horariosCitasFuturas);
                     request.setAttribute("fechasFormateadasFuturas", fechasFormateadasFuturas);
-
-                    request.setAttribute("citasPasadas", citasPasadas);
-                    request.setAttribute("horariosCitasPasadas", horariosCitasPasadas);
-                    request.setAttribute("fechasFormateadasPasadas", fechasFormateadasPasadas);
 
                     // También se envían las listas de mascotas y servicios para usar como filtros en la vista
                     IMascotaDAO mascotaDAO = new MascotaDAO();
@@ -375,13 +358,9 @@ public class CitaController extends HttpServlet {
                     List<Cita> todasCitas = citaDAO.getCitasByCliente(cliente.getId()); // o usuario.getId()
 
                     List<Cita> citasFuturas = new ArrayList<>();
-                    List<Cita> citasPasadas = new ArrayList<>();
 
                     Map<Integer, String> horariosCitasFuturas = new HashMap<>();
                     Map<Integer, Date> fechasFormateadasFuturas = new HashMap<>();
-
-                    Map<Integer, String> horariosCitasPasadas = new HashMap<>();
-                    Map<Integer, Date> fechasFormateadasPasadas = new HashMap<>();
 
                     LocalDateTime ahora = LocalDateTime.now();
 
@@ -399,23 +378,13 @@ public class CitaController extends HttpServlet {
                             citasFuturas.add(c);
                             horariosCitasFuturas.put(c.getId(), horario);
                             fechasFormateadasFuturas.put(c.getId(), fechaSQL);
-                        } else {
-                            citasPasadas.add(c);
-                            horariosCitasPasadas.put(c.getId(), horario);
-                            fechasFormateadasPasadas.put(c.getId(), fechaSQL);
                         }
                     }
 
                     // Luego pones estos atributos en la request:
                     request.setAttribute("citasFuturas", citasFuturas);
-                    request.setAttribute("citasPasadas", citasPasadas);
-
                     request.setAttribute("horariosCitasFuturas", horariosCitasFuturas);
                     request.setAttribute("fechasFormateadasFuturas", fechasFormateadasFuturas);
-
-                    request.setAttribute("horariosCitasPasadas", horariosCitasPasadas);
-                    request.setAttribute("fechasFormateadasPasadas", fechasFormateadasPasadas);
-
 
                     request.setAttribute("listaMascotas", mascotaDAO.getMascotasByIdCliente(cliente.getId()));
                     request.setAttribute("listaServicios", servicioDAO.obtenerServicios());
@@ -513,13 +482,9 @@ public class CitaController extends HttpServlet {
                         List<Cita> todasCitas = citaDAO.getCitasByCliente(cliente.getId()); // o usuario.getId()
 
                         List<Cita> citasFuturas = new ArrayList<>();
-                        List<Cita> citasPasadas = new ArrayList<>();
 
                         Map<Integer, String> horariosCitasFuturas = new HashMap<>();
                         Map<Integer, Date> fechasFormateadasFuturas = new HashMap<>();
-
-                        Map<Integer, String> horariosCitasPasadas = new HashMap<>();
-                        Map<Integer, Date> fechasFormateadasPasadas = new HashMap<>();
 
                         LocalDateTime ahora = LocalDateTime.now();
 
@@ -537,22 +502,14 @@ public class CitaController extends HttpServlet {
                                 citasFuturas.add(c);
                                 horariosCitasFuturas.put(c.getId(), horario);
                                 fechasFormateadasFuturas.put(c.getId(), fechaSQL);
-                            } else {
-                                citasPasadas.add(c);
-                                horariosCitasPasadas.put(c.getId(), horario);
-                                fechasFormateadasPasadas.put(c.getId(), fechaSQL);
                             }
                         }
 
 
                         request.setAttribute("citasFuturas", citasFuturas);
-                        request.setAttribute("citasPasadas", citasPasadas);
 
                         request.setAttribute("horariosCitasFuturas", horariosCitasFuturas);
                         request.setAttribute("fechasFormateadasFuturas", fechasFormateadasFuturas);
-
-                        request.setAttribute("horariosCitasPasadas", horariosCitasPasadas);
-                        request.setAttribute("fechasFormateadasPasadas", fechasFormateadasPasadas);
 
                         IMascotaDAO mascotaDAO = new MascotaDAO();
                         IServicioDAO servicioDAO = new ServicioDAO();
@@ -589,7 +546,6 @@ public class CitaController extends HttpServlet {
                     List<Cita> listaCitas = citaDAO.filtrarCitasCliente(idCliente, mascotaId, servicioId, fecha);
 
                     List<Cita> citasFuturas = new ArrayList<>();
-                    List<Cita> citasPasadas = new ArrayList<>();
 
                     LocalDate hoy = LocalDate.now();
                     LocalTime ahora = LocalTime.now();
@@ -600,16 +556,11 @@ public class CitaController extends HttpServlet {
 
                         if (fechaCita.isAfter(hoy) || (fechaCita.isEqual(hoy) && horaInicio.isAfter(ahora))) {
                             citasFuturas.add(cita);
-                        } else {
-                            citasPasadas.add(cita);
                         }
                     }
 
                     Map<Integer, String> horariosCitasFuturas = new HashMap<>();
                     Map<Integer, Date> fechasFormateadasFuturas = new HashMap<>();
-
-                    Map<Integer, String> horariosCitasPasadas = new HashMap<>();
-                    Map<Integer, Date> fechasFormateadasPasadas = new HashMap<>();
 
                     for (Cita cita : citasFuturas) {
                         LocalTime horaInicio = cita.getCalendario().getHoraInicio();
@@ -619,21 +570,9 @@ public class CitaController extends HttpServlet {
                         fechasFormateadasFuturas.put(cita.getId(), java.sql.Date.valueOf(cita.getCalendario().getFecha()));
                     }
 
-                    for (Cita cita : citasPasadas) {
-                        LocalTime horaInicio = cita.getCalendario().getHoraInicio();
-                        int duracion = cita.getServicio().getDuracion();
-                        LocalTime horaFinCalculada = horaInicio.plusMinutes(duracion);
-                        horariosCitasPasadas.put(cita.getId(), horaInicio + " - " + horaFinCalculada);
-                        fechasFormateadasPasadas.put(cita.getId(), java.sql.Date.valueOf(cita.getCalendario().getFecha()));
-                    }
-
                     request.setAttribute("citasFuturas", citasFuturas);
                     request.setAttribute("horariosCitasFuturas", horariosCitasFuturas);
                     request.setAttribute("fechasFormateadasFuturas", fechasFormateadasFuturas);
-
-                    request.setAttribute("citasPasadas", citasPasadas);
-                    request.setAttribute("horariosCitasPasadas", horariosCitasPasadas);
-                    request.setAttribute("fechasFormateadasPasadas", fechasFormateadasPasadas);
 
                     // Recargar listas para filtros
                     request.setAttribute("listaMascotas", mascotaDAO.getMascotasByIdCliente(idCliente));

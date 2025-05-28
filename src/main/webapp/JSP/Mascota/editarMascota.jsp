@@ -15,7 +15,6 @@
         <script src="${contexto}/JS/validarAvatarMascota.js" defer></script>
         <script src="${contexto}/JS/vistaFotoEditar.js" defer></script>
         <script src="${contexto}/JS/quitarFotoEditar.js" defer></script>
-        <script src="${contexto}/JS/selectMascotas.js" defer></script>
     </head>
     <body>
 
@@ -47,30 +46,28 @@
                         <input type="text" class="form-control" id="nombre" name="nombre" value="${mascota.nombre}">
                     </div>
 
-                     <div class="col-md-6 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="especie" class="form-label">* Especie</label>
-                        <select class="form-select" id="selectEspecie" name="especie">
-                            <option value="" disabled>Seleccione una especie...</option>
+                        <input type="text" class="form-control" list="listaEspecies" id="especie" name="especie" placeholder="Selecciona o escribe una especie"
+                               value="${mascota.especie}" />
+                        <datalist id="listaEspecies">
                             <c:forEach var="especie" items="${listaEspecies}">
-                                <option value="${especie}" ${mascota.especie == especie ? 'selected' : ''}>${especie}</option>
+                                <option value="${especie}"></option>
                             </c:forEach>
-                            <option value="otra" ${mascota.especie == 'otra' ? 'selected' : ''}>Otra...</option>
-                        </select>
-                        <input type="text" class="form-control mt-2" id="inputEspecie" name="especie" placeholder="Especie no registrada" style="display: none;" value="${mascota.especie != 'otra' ? '' : mascota.especie}">
+                        </datalist>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="raza" class="form-label">* Raza</label>
-                        <select class="form-select" id="selectRaza" name="raza">
-                            <option value="" disabled>Seleccione una raza...</option>
+                        <input type="text" class="form-control" list="listaRazas" id="raza" name="raza" placeholder="Selecciona o escribe una raza"
+                               value="${mascota.raza}" />
+                        <datalist id="listaRazas">
                             <c:forEach var="raza" items="${listaRazas}">
-                                <option value="${raza}" ${mascota.raza == raza ? 'selected' : ''}>${raza}</option>
+                                <option value="${raza}"></option>
                             </c:forEach>
-                            <option value="otra" ${mascota.raza == 'otra' ? 'selected' : ''}>Otra...</option>
-                        </select>
-                        <input type="text" class="form-control mt-2" id="inputRaza" name="raza" placeholder="Raza no registrada" style="display: none;" value="${mascota.raza != 'otra' ? '' : mascota.raza}">
+                        </datalist>
                     </div>
 
                     <div class="col-md-6 mb-3">

@@ -1,6 +1,6 @@
 <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -56,45 +56,44 @@
         <div class="container mt-5">
             <h2 class="text-center text-primary mb-4">Historial Médico de tus Mascotas</h2>
 
-            <c:if test="${not empty listaHistoriales}">
-                <div class="row g-4">
-                    <c:forEach var="historial" items="${listaHistoriales}">
-                        <div class="col-md-6">
-                            <div class="card shadow-sm h-100">
-                                <div class="card-header bg-light d-flex align-items-center">
-                                    <img src="${pageContext.request.contextPath}/IMG/fotosMascotas/${historial.mascota.foto}"
-                                         class="img-thumbnail me-3"
-                                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
-                                    <i class="fas fa-notes-medical fa-2x text-info me-3"></i>
-                                    <div>
-                                        <h5 class="mb-0">${historial.mascota.nombre} (${historial.mascota.especie})</h5>
-                                        <small class="text-muted">
-                                            Fecha: <fmt:formatDate value="${historial.fecha}" pattern="dd/MM/yyyy HH:mm" />
-                                        </small>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="text-secondary">Descripción del Problema:</h6>
-                                    <p>${historial.descripcion}</p>
-                                    <h6 class="text-secondary">Tratamiento Aplicado:</h6>
-                                    <p>${historial.tratamiento}</p>
-                                    <h6 class="text-secondary">Veterinario Responsable:</h6>
-                                    <p>Carmen Vidal</p>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </div>
+            <c:if test="${not empty mapaHistorialesPorMascota}">
+                <div class="accordion" id="accordionMascotas">
+                <c:forEach var="entry" items="${mapaHistorialesPorMascota.entrySet()}">
+                  <c:set var="mascota" value="${entry.key}" />
+                  <c:set var="historiales" value="${entry.value}" />
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading${mascota.id}">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${mascota.id}" aria-expanded="false" aria-controls="collapse${mascota.id}">
+                        <img src="${pageContext.request.contextPath}/IMG/fotosMascotas/${mascota.foto}" alt="${mascota.nombre}" style="width:60px; height:60px; object-fit:cover; border-radius:50%; margin-right:10px;">
+                        ${mascota.nombre}
+                      </button>
+                    </h2>
+                    <div id="collapse${mascota.id}" class="accordion-collapse collapse" aria-labelledby="heading${mascota.id}" data-bs-parent="#accordionMascotas">
+                      <div class="accordion-body">
+                        <c:forEach var="historial" items="${historiales}">
+                          <p><strong>Fecha:</strong> <fmt:formatDate value="${historial.fecha}" pattern="dd/MM/yyyy HH:mm" /></p>
+                          <p><strong>Descripción:</strong> ${historial.descripcion}</p>
+                          <p><strong>Tratamiento:</strong> ${historial.tratamiento}</p>
+                          <hr/>
+                        </c:forEach>
+                      </div>
+                    </div>
+                  </div>
+                </c:forEach>
+              </div>
             </c:if>
 
-            <c:if test="${empty listaHistoriales}">
+            <c:if test="${empty mapaHistorialesPorMascota}">
                 <div class="alert alert-info text-center">
                     No hay historiales médicos registrados para tus mascotas.
                 </div>
             </c:if>
         </div>
 
+        <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
         <%@ include file="/INC/pie.jsp" %>
 
     </body>

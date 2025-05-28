@@ -23,9 +23,13 @@ import es.petclinic.models.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -116,22 +120,34 @@ public class ClienteController extends HttpServlet {
                     Usuario cliente = (Usuario) request.getSession().getAttribute("usuario");
 
                     if (cliente != null) {
-                        // Obtener todas las mascotas del cliente
                         MascotaDAO mascotaDAO = new MascotaDAO();
-                        List<Mascota> listaMascotas = mascotaDAO.getMascotasByIdCliente(cliente.getId());
-
-                        // Obtener todos los historiales asociados a esas mascotas
                         IHistorialMedicoDAO historialDAO = new HistorialMedicoDAO();
-                        List<HistorialMedico> listaHistoriales = new ArrayList<>();
+                        
+                        // Obtener todas las mascotas del cliente
+                        List<Mascota> listaMascotas = mascotaDAO.getMascotasByIdCliente(cliente.getId());                      
+
+                        // Crear mapa para asociar cada mascota con su lista de historiales
+                        Map<Mascota, List<HistorialMedico>> mapaHistorialesPorMascota = new LinkedHashMap<>();
 
                         for (Mascota mascota : listaMascotas) {
+                            // Obtener la lista de historiales médicos de una mascota en concreto
                             List<HistorialMedico> historialesMascota = historialDAO.getHistorialesByIdMascota(mascota.getId());
-                            listaHistoriales.addAll(historialesMascota);
-                        }
+                            
+                            if (!historialesMascota.isEmpty()) {
+                                // Ordenar historiales de más reciente a más antiguo
+                                Collections.sort(historialesMascota, new Comparator<HistorialMedico>() {
+                                    @Override
+                                    public int compare(HistorialMedico h1, HistorialMedico h2) {
+                                        return h2.getFecha().compareTo(h1.getFecha());
+                                    }
+                                });
+                                // Meter en el mapa como clave la mascota y como valor sus historiales médicos
+                                mapaHistorialesPorMascota.put(mascota, historialesMascota);
+                            }
+                            
+                        }                     
 
-                        // Pasar los datos a la vista
-                        request.setAttribute("listaHistoriales", listaHistoriales);
-                        request.setAttribute("listaMascotas", listaMascotas);
+                        request.setAttribute("mapaHistorialesPorMascota", mapaHistorialesPorMascota);
                     }
 
                     url = "JSP/Cliente/historialMedico.jsp";
