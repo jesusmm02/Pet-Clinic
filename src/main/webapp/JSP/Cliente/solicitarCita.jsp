@@ -35,6 +35,40 @@
 
         <div class="container mt-5">
             <h2 class="text-center text-primary mb-4">Pedir Cita para Mascota</h2>
+            
+            <!-- Horarios de la clínica -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-clock"></i> Horarios de Atención
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-bordered table-hover mb-0">
+                        <thead class="table-light text-center">
+                            <tr>
+                                <th>Día</th>
+                                <th>Mañana</th>
+                                <th>Tarde</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr>
+                                <td>Lunes a Viernes</td>
+                                <td>09:00 - 14:00</td>
+                                <td>17:00 - 20:00</td>
+                            </tr>
+                            <tr>
+                                <td>Sábado</td>
+                                <td>10:00 - 14:00</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Domingo</td>
+                                <td colspan="2">Cerrado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <form action="CitaController" method="POST">
                 <input type="hidden" name="accion" value="crearCita">
