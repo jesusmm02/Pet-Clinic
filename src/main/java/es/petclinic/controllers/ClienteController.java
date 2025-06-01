@@ -256,16 +256,19 @@ public class ClienteController extends HttpServlet {
 
                     // Validar cambio de contraseña
                     if (passwordActual != null && !passwordActual.isEmpty()) {
-                        String hashedPasswordActual = Utils.hashMD5(passwordActual);
+                    String hashedPasswordActual = Utils.hashMD5(passwordActual);
 
                         if (hashedPasswordActual.equals(usuario.getPassword())) {
-                            if (passwordNueva1 != null && passwordNueva1.equals(passwordNueva2)) {
+                            if (passwordNueva1 != null && !passwordNueva1.isEmpty() && passwordNueva1.equals(passwordNueva2)) {
                                 String hashedNuevaPassword = Utils.hashMD5(passwordNueva1);
                                 usuario.setPassword(hashedNuevaPassword);
+                            } else if ((passwordNueva1 == null || passwordNueva1.isEmpty()) && (passwordNueva2 == null || passwordNueva2.isEmpty())) {
+                                // No cambia la contraseña porque no se puso nueva contraseña
+                                // No hacemos nada aquí
                             } else {
                                 request.setAttribute("usuario", usuario);
                                 request.setAttribute("cliente", cliente);
-                                request.setAttribute("error", "Las contraseñas nuevas no coinciden");
+                                request.setAttribute("error", "Las contraseñas nuevas no coinciden o están vacías");
                                 request.getRequestDispatcher("JSP/Cliente/editarPerfil.jsp").forward(request, response);
                                 return;
                             }

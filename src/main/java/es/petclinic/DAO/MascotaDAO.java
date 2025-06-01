@@ -6,6 +6,8 @@ import es.petclinic.beans.HistorialMedico;
 import es.petclinic.beans.Mascota;
 
 import es.petclinic.persistence.HibernateUtil;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -186,8 +188,12 @@ public class MascotaDAO extends GenericoDAO<Mascota> implements IMascotaDAO {
                 for (Cita cita : citas) {
                     Calendario calendario = cita.getCalendario();
                     if (calendario != null) {
-                        calendario.setDisponible(true);
-                        session.update(calendario);
+                        LocalDate fecha = calendario.getFecha();
+                        LocalTime horaInicio = calendario.getHoraInicio();
+                        int duracion = cita.getServicio().getDuracion();
+
+                        CalendarioDAO calendarioDAO = new CalendarioDAO();
+                        calendarioDAO.liberarBloquesDeCita(fecha, horaInicio, duracion);
                     }
                     session.delete(cita);
                 }
